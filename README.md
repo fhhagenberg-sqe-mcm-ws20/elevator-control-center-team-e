@@ -1,3 +1,5 @@
+[![CI Actions Status](https://github.com/fhhagenberg-sqe-mcm-ws20/elevator-control-center-team-e/workflows/CI/badge.svg)](https://github.com/fhhagenberg-sqe-mcm-ws20/elevator-control-center-team-e/actions)
+
 # Graphical User Interface with JavaFx
 
 ### Prerequisites
