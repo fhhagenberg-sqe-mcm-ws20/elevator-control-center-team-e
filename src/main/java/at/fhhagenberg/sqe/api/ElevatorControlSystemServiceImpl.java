@@ -31,12 +31,8 @@ public class ElevatorControlSystemServiceImpl implements ElevatorControlSystemSe
     public ElevatorControlSystem get() throws RemoteException {
         long clockTick = elevatorControl.getClockTick();
         int floorHeight = elevatorControl.getFloorHeight();
-
-        int totalNumberOfFloors = elevatorControl.getFloorNum();
-        List<BuildingFloor> floors = buildingFloorService.getAll(totalNumberOfFloors);
-
-        int totalNumberOfElevators = elevatorControl.getElevatorNum();
-        List<Elevator> elevators = elevatorService.getAll(totalNumberOfElevators, totalNumberOfFloors);
+        List<BuildingFloor> floors = buildingFloorService.getAll();
+        List<Elevator> elevators = elevatorService.getAll();
 
         return new ElevatorControlSystem(clockTick, floorHeight, floors, elevators);
     }
