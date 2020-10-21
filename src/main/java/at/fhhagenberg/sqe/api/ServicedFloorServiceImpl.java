@@ -39,7 +39,7 @@ public class ServicedFloorServiceImpl implements ServicedFloorService {
         int totalNumberOfFloors = elevatorControl.getFloorNum();
 
         if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators && floorNumber >= 0 && floorNumber < totalNumberOfFloors) {
-            boolean isElevatorButtonServiced = elevatorControl.getElevatorButton(elevatorNumber, floorNumber);
+            boolean isElevatorButtonServiced = elevatorControl.getServicesFloors(elevatorNumber, floorNumber);
             return new ServicedFloor(elevatorNumber, floorNumber, isElevatorButtonServiced);
         }
         return null;
