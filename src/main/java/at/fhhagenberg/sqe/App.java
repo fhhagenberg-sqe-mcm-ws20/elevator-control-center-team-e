@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe;
 
+import at.fhhagenberg.sqe.util.SystemInfo;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

@@ -32,11 +32,19 @@
             <version>5.5.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit5</artifactId>
             <version>4.0.16-alpha</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Dependency injection -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.2.3</version>
         </dependency>
     </dependencies>
 
