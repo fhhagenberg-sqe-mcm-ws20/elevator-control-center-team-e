@@ -1,4 +1,4 @@
-package at.fhhagenberg.sqe;
+package at.fhhagenberg.sqe.util;
 
 public class SystemInfo {
 
