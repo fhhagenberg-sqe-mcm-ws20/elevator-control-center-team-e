@@ -8,7 +8,6 @@ import at.fhhagenberg.sqe.entity.ElevatorControlSystem;
 import at.fhhagenberg.sqe.entity.ServicedFloor;
 import at.fhhagenberg.sqe.model.Resource;
 import com.google.inject.Inject;
-import java.rmi.RemoteException;
 
 public class ElevatorRepository {
 
@@ -31,8 +30,8 @@ public class ElevatorRepository {
         try {
             ElevatorControlSystem data = elevatorControlSystemService.get();
             return Resource.success(data);
-        } catch (RemoteException remoteException) {
-            return Resource.error(remoteException);
+        } catch (Exception exception) {
+            return Resource.error(exception);
         }
     }
 
@@ -40,8 +39,8 @@ public class ElevatorRepository {
         try {
             elevatorService.updateCommittedDirection(elevator);
             return Resource.success(true);
-        } catch (RemoteException remoteException) {
-            return Resource.error(remoteException);
+        } catch (Exception exception) {
+            return Resource.error(exception);
         }
     }
 
@@ -49,8 +48,8 @@ public class ElevatorRepository {
         try {
             servicedFloorService.updateServicedFloor(servicedFloor);
             return Resource.success(true);
-        } catch (RemoteException remoteException) {
-            return Resource.error(remoteException);
+        } catch (Exception exception) {
+            return Resource.error(exception);
         }
     }
 
@@ -58,8 +57,8 @@ public class ElevatorRepository {
         try {
             elevatorService.updateTargetFloor(elevator);
             return Resource.success(true);
-        } catch (RemoteException remoteException) {
-            return Resource.error(remoteException);
+        } catch (Exception exception) {
+            return Resource.error(exception);
         }
     }
 }

@@ -6,6 +6,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface BuildingFloorService {
-    public List<BuildingFloor> getAll(int totalNumberOfFloors) throws RemoteException;
+    public List<BuildingFloor> getAll() throws RemoteException;
     public BuildingFloor get(int floorNumber) throws RemoteException;
 }

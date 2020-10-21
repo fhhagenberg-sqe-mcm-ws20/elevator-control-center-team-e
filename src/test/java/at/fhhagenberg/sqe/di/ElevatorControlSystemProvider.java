@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ElevatorControlSystemProvider implements Provider<ElevatorControlSystem> {
 
-    public static final int FLOORS = 5;
-    public static final int ELEVATORS = 3;
+    public static final int FLOORS_COUNT = 5;
+    public static final int ELEVATORS_COUNT = 3;
     public static final int FEET_PER_FLOOR = 14;
     public static final int CAPACITY_PER_ELEVATOR = 8;
 
@@ -16,9 +16,9 @@ public class ElevatorControlSystemProvider implements Provider<ElevatorControlSy
     public ElevatorControlSystem get() {
         return new ElevatorControlSystem(
                 0L,
-                FEET_PER_FLOOR * FLOORS,
-                createMockBuildingFloors(FLOORS),
-                createMockElevators(ELEVATORS, FLOORS)
+                FEET_PER_FLOOR * FLOORS_COUNT,
+                createMockBuildingFloors(FLOORS_COUNT),
+                createMockElevators(ELEVATORS_COUNT, FLOORS_COUNT)
         );
     }
 

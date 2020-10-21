@@ -19,18 +19,30 @@ public class ServicedFloorServiceImpl implements ServicedFloorService {
     }
 
     @Override
-    public List<ServicedFloor> getAll(int elevatorNumber, int totalNumberOfFloors) throws RemoteException {
-        List<ServicedFloor> result = new ArrayList<>(totalNumberOfFloors);
-        for (int floorNumber = 0; floorNumber < totalNumberOfFloors; floorNumber++) {
-            result.add(get(elevatorNumber, floorNumber));
+    public List<ServicedFloor> getAll(int elevatorNumber) throws RemoteException {
+        int totalNumberOfElevators = elevatorControl.getElevatorNum();
+        int totalNumberOfFloors = elevatorControl.getFloorNum();
+
+        if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators) {
+            List<ServicedFloor> result = new ArrayList<>(totalNumberOfFloors);
+            for (int floorNumber = 0; floorNumber < totalNumberOfFloors; floorNumber++) {
+                result.add(get(elevatorNumber, floorNumber));
+            }
+            return result;
         }
-        return result;
+        return null;
     }
 
     @Override
     public ServicedFloor get(int elevatorNumber, int floorNumber) throws RemoteException {
-        boolean isElevatorButtonServiced = elevatorControl.getElevatorButton(elevatorNumber, floorNumber);
-        return new ServicedFloor(elevatorNumber, floorNumber, isElevatorButtonServiced);
+        int totalNumberOfElevators = elevatorControl.getElevatorNum();
+        int totalNumberOfFloors = elevatorControl.getFloorNum();
+
+        if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators && floorNumber >= 0 && floorNumber < totalNumberOfFloors) {
+            boolean isElevatorButtonServiced = elevatorControl.getServicesFloors(elevatorNumber, floorNumber);
+            return new ServicedFloor(elevatorNumber, floorNumber, isElevatorButtonServiced);
+        }
+        return null;
     }
 
     @Override

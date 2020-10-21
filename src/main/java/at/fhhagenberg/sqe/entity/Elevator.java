@@ -42,6 +42,7 @@ public class Elevator {
         setCurrentSpeed(currentSpeed);
         setCapacity(capacity);
         setTargetFloor(targetFloor);
+        setServicedFloors(servicedFloors);
     }
 
     public int getElevatorNumber() {

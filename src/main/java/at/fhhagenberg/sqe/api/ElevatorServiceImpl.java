@@ -27,30 +27,37 @@ public class ElevatorServiceImpl implements ElevatorService {
     }
 
     @Override
-    public List<Elevator> getAll(int totalNumberOfElevators, int totalNumberOfFloors) throws RemoteException {
+    public List<Elevator> getAll() throws RemoteException {
+        int totalNumberOfElevators = elevatorControl.getElevatorNum();
+
         List<Elevator> result = new ArrayList<>(totalNumberOfElevators);
         for (int elevatorNumber = 0; elevatorNumber < totalNumberOfElevators; elevatorNumber++) {
-            result.add(get(elevatorNumber, totalNumberOfFloors));
+            result.add(get(elevatorNumber));
         }
         return result;
     }
 
     @Override
-    public Elevator get(int elevatorNumber, int totalNumberOfFloors) throws RemoteException {
-        return new Elevator.Builder()
-                .setElevatorNumber(elevatorNumber)
-                .setAcceleration(elevatorControl.getElevatorAccel(elevatorNumber))
-                .setButtons(floorButtonService.getAll(elevatorNumber, totalNumberOfFloors))
-                .setCapacity(elevatorControl.getElevatorCapacity(elevatorNumber))
-                .setCommittedDirection(Direction.valueOf(elevatorControl.getCommittedDirection(elevatorNumber)))
-                .setCurrentFloor(elevatorControl.getElevatorFloor(elevatorNumber))
-                .setCurrentPosition(elevatorControl.getElevatorPosition(elevatorNumber))
-                .setCurrentSpeed(elevatorControl.getElevatorSpeed(elevatorNumber))
-                .setCurrentWeight(elevatorControl.getElevatorWeight(elevatorNumber))
-                .setDoorState(DoorState.valueOf(elevatorControl.getElevatorDoorStatus(elevatorNumber)))
-                .setServicedFloors(servicedFloorService.getAll(elevatorNumber, totalNumberOfFloors))
-                .setTargetFloor(elevatorControl.getTarget(elevatorNumber))
-                .build();
+    public Elevator get(int elevatorNumber) throws RemoteException {
+        int totalNumberOfFloors = elevatorControl.getFloorNum();
+
+        if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfFloors) {
+            return new Elevator.Builder()
+                    .setElevatorNumber(elevatorNumber)
+                    .setAcceleration(elevatorControl.getElevatorAccel(elevatorNumber))
+                    .setButtons(floorButtonService.getAll(elevatorNumber))
+                    .setCapacity(elevatorControl.getElevatorCapacity(elevatorNumber))
+                    .setCommittedDirection(Direction.valueOf(elevatorControl.getCommittedDirection(elevatorNumber)))
+                    .setCurrentFloor(elevatorControl.getElevatorFloor(elevatorNumber))
+                    .setCurrentPosition(elevatorControl.getElevatorPosition(elevatorNumber))
+                    .setCurrentSpeed(elevatorControl.getElevatorSpeed(elevatorNumber))
+                    .setCurrentWeight(elevatorControl.getElevatorWeight(elevatorNumber))
+                    .setDoorState(DoorState.valueOf(elevatorControl.getElevatorDoorStatus(elevatorNumber)))
+                    .setServicedFloors(servicedFloorService.getAll(elevatorNumber))
+                    .setTargetFloor(elevatorControl.getTarget(elevatorNumber))
+                    .build();
+        }
+        return null;
     }
 
     @Override

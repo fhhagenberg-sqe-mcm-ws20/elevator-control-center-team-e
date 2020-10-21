@@ -19,18 +19,32 @@ public class FloorButtonServiceImpl implements FloorButtonService {
     }
 
     @Override
-    public FloorButton get(int elevatorNumber, int floorNumber) throws RemoteException {
-        boolean isActive = elevatorControl.getElevatorButton(elevatorNumber, floorNumber);
-        return new FloorButton(elevatorNumber, floorNumber, isActive);
+    public List<FloorButton> getAll(int elevatorNumber) throws RemoteException {
+        int totalNumberOfElevators = elevatorControl.getElevatorNum();
+        int totalNumberOfFloors = elevatorControl.getFloorNum();
+
+        if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators) {
+            List<FloorButton> buttons = new ArrayList<>(totalNumberOfFloors);
+            for (int floorNumber = 0; floorNumber < totalNumberOfFloors; floorNumber++) {
+                FloorButton button = get(elevatorNumber, floorNumber);
+                if (button != null) {
+                    buttons.add(button);
+                }
+            }
+            return buttons;
+        }
+        return null;
     }
 
     @Override
-    public List<FloorButton> getAll(int elevatorNumber, int totalNumberOfFloors) throws RemoteException {
-        List<FloorButton> buttons = new ArrayList<>();
+    public FloorButton get(int elevatorNumber, int floorNumber) throws RemoteException {
+        int totalNumberOfElevators = elevatorControl.getElevatorNum();
+        int totalNumberOfFloors = elevatorControl.getFloorNum();
 
-        for (int i = 0; i < totalNumberOfFloors; i++) {
-            buttons.add(get(elevatorNumber, i));
+        if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators && floorNumber >= 0 && floorNumber < totalNumberOfFloors) {
+            boolean isActive = elevatorControl.getElevatorButton(elevatorNumber, floorNumber);
+            return new FloorButton(elevatorNumber, floorNumber, isActive);
         }
-        return buttons;
+        return null;
     }
 }
