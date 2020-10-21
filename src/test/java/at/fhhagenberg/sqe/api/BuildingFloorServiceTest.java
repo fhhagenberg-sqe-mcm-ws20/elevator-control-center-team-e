@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BuildingFloorServiceTest {
+public class BuildingFloorServiceTest{
 
     private BuildingFloorService buildingFloorService;
 
@@ -22,7 +22,7 @@ public class BuildingFloorServiceTest {
     public void testGetAll() throws RemoteException {
         List<BuildingFloor> floors = buildingFloorService.getAll();
         assertNotNull(floors);
-        assertEquals(ElevatorControlSystemProvider.FLOORS, floors.size());
+        assertEquals(ElevatorControlSystemProvider.FLOORS_COUNT, floors.size());
         for (BuildingFloor floor : floors) {
             assertNotNull(floor);
         }
@@ -30,7 +30,7 @@ public class BuildingFloorServiceTest {
 
     @Test
     public void testGet() throws RemoteException {
-        int floorNumber = ElevatorControlSystemProvider.FLOORS - 1;
+        int floorNumber = ElevatorControlSystemProvider.FLOORS_COUNT - 1;
         BuildingFloor floor = buildingFloorService.get(floorNumber);
         assertNotNull(floor);
         assertEquals(floor.getFloorNumber(), floorNumber);
@@ -38,7 +38,7 @@ public class BuildingFloorServiceTest {
 
     @Test
     public void testGetInvalidFloorNumber() throws RemoteException {
-        int floorNumber = ElevatorControlSystemProvider.FLOORS + 1;
+        int floorNumber = ElevatorControlSystemProvider.FLOORS_COUNT + 1;
         BuildingFloor floor = buildingFloorService.get(floorNumber);
         assertNull(floor);
     }
