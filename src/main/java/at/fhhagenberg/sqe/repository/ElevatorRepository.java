@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.repository;
 
+import at.fhhagenberg.sqe.IElevator;
 import at.fhhagenberg.sqe.api.ElevatorControlSystemService;
 import at.fhhagenberg.sqe.api.ElevatorService;
 import at.fhhagenberg.sqe.api.ServicedFloorService;
@@ -7,7 +8,6 @@ import at.fhhagenberg.sqe.entity.Elevator;
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem;
 import at.fhhagenberg.sqe.entity.ServicedFloor;
 import at.fhhagenberg.sqe.model.Resource;
-import at.fhhagenberg.sqe.rmi.IElevator;
 import com.google.inject.Inject;
 
 public class ElevatorRepository {
