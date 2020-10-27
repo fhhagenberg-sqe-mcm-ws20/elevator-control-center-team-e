@@ -1,4 +1,4 @@
-package at.fhhagenberg.sqe.rmi;
+package at.fhhagenberg.sqe;
 
 import at.fhhagenberg.sqe.entity.*;
 import at.fhhagenberg.sqe.util.CollectionUtils;

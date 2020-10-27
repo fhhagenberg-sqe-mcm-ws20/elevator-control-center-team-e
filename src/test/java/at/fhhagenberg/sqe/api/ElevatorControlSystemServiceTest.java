@@ -6,9 +6,7 @@ import at.fhhagenberg.sqe.entity.Elevator;
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.rmi.RemoteException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ElevatorControlSystemServiceTest {
@@ -22,10 +20,9 @@ public class ElevatorControlSystemServiceTest {
     @Test
     public void testGet() throws RemoteException {
         ElevatorControlSystem elevatorControlSystem = service.get();
-
         Elevator elevator = elevatorControlSystem.getElevator(0);
-        assertNotNull(elevator);
 
+        assertNotNull(elevator);
         assertEquals(ElevatorControlSystemProvider.ELEVATORS_COUNT, elevatorControlSystem.getNumberOfElevators());
     }
 }

@@ -14,14 +14,12 @@ public class CollectionUtilsTest {
     class ConvertCollectionToMapTest {
         @Test
         public void testConvertCollectionToMapRegular() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             List<Dummy> items = createDummyList(itemsCount);
             Map<Integer, Dummy> map = CollectionUtils.convertCollectionToMap(items, Dummy::getDummy);
 
             assertEquals(itemsCount, map.size());
-            for (int i = 0; i < itemsCount; i++) {
-                assertEquals(items.get(i), map.get(i));
-            }
+            assertEquals(items.get(2), map.get(2));
         }
 
         @Test
@@ -42,7 +40,7 @@ public class CollectionUtilsTest {
 
         @Test
         public void testConvertCollectionToMapNullSelector() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             List<Dummy> items = createDummyList(itemsCount);
 
             assertThrows(NullPointerException.class, () -> {
@@ -60,7 +58,7 @@ public class CollectionUtilsTest {
 
         @Test
         public void testConvertCollectionToMapDuplicateKeys() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             List<Dummy> items = createDummyList(itemsCount);
             items.get(3).setDummy(2);
             Map<Integer, Dummy> map = CollectionUtils.convertCollectionToMap(items, Dummy::getDummy);
@@ -71,7 +69,7 @@ public class CollectionUtilsTest {
 
         @Test
         public void testConvertCollectionToMapInterchangedItems() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             List<Dummy> items = createDummyList(itemsCount);
             items.get(3).setDummy(2);
             items.get(2).setDummy(3);
@@ -87,14 +85,12 @@ public class CollectionUtilsTest {
     class ConvertMapToListTest {
         @Test
         public void testConvertMapToListRegular() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             Map<Integer, Dummy> map = createDummyMap(itemsCount);
             List<Dummy> items = CollectionUtils.convertMapToList(map);
 
             assertEquals(itemsCount, items.size());
-            for (int i = 0; i < itemsCount; i++) {
-                assertEquals(map.get(i), items.get(i));
-            }
+            assertEquals(map.get(2), items.get(2));
         }
 
         @Test
@@ -118,9 +114,10 @@ public class CollectionUtilsTest {
     class GetItemWhereTest {
         @Test
         public void testGetItemWhereRegular() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             List<Dummy> items = createDummyList(itemsCount);
             Dummy dummyResult = CollectionUtils.getItemWhere(items, dummy -> dummy.getDummy() == 3);
+
             assertNotNull(dummyResult);
             assertEquals(items.get(3), dummyResult);
         }
@@ -130,6 +127,7 @@ public class CollectionUtilsTest {
             int itemsCount = 10;
             List<Dummy> items = createDummyList(itemsCount);
             Dummy dummyResult = CollectionUtils.getItemWhere(items, dummy -> dummy.getDummy() == 12341);
+
             assertNull(dummyResult);
         }
 
@@ -137,13 +135,15 @@ public class CollectionUtilsTest {
         public void testGetItemWhereNullCollection() {
             List<Dummy> items = null;
             Dummy dummyResult = CollectionUtils.getItemWhere(items, dummy -> dummy.getDummy() == 12341);
+
             assertNull(dummyResult);
         }
 
         @Test
         public void testGetItemWhereNullSelector() {
-            int itemsCount = 10;
+            int itemsCount = 5;
             List<Dummy> items = createDummyList(itemsCount);
+
             assertThrows(NullPointerException.class, () -> {
                 CollectionUtils.getItemWhere(items, null);
             });
@@ -153,6 +153,7 @@ public class CollectionUtilsTest {
         public void testGetItemWhereNullCollectionNullSelector() {
             List<Dummy> items = null;
             Dummy dummyResult = CollectionUtils.getItemWhere(items, null);
+
             assertNull(dummyResult);
         }
     }

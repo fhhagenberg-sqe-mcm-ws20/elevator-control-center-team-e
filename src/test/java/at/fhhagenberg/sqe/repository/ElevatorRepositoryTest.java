@@ -23,6 +23,7 @@ public class ElevatorRepositoryTest {
     @Test
     public void testGetElevatorControlSystem() {
         Resource<ElevatorControlSystem> elevatorControlSystem = repository.getElevatorControlSystem();
+
         assertNotNull(elevatorControlSystem);
         assertEquals(Status.SUCCESS, elevatorControlSystem.getStatus());
         assertNull(elevatorControlSystem.getError());
@@ -34,14 +35,13 @@ public class ElevatorRepositoryTest {
         Elevator elevator = repository.getElevatorControlSystem().getData().getElevator(0);
         elevator.setCommittedDirection(Direction.DOWN);
         Resource<Boolean> booleanResource = repository.updateCommittedDirection(elevator);
+        Elevator elevatorAfter = repository.getElevatorControlSystem().getData().getElevator(0);
 
         assertNotNull(booleanResource);
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
-        assertTrue(booleanResource.getData());
-
-        elevator = repository.getElevatorControlSystem().getData().getElevator(0);
-        assertEquals(Direction.DOWN, elevator.getCommittedDirection());
+        assertEquals(true, booleanResource.getData());
+        assertEquals(Direction.DOWN, elevatorAfter.getCommittedDirection());
     }
 
     @Test
@@ -49,14 +49,13 @@ public class ElevatorRepositoryTest {
         ServicedFloor servicedFloor = repository.getElevatorControlSystem().getData().getElevator(0).getServicedFloor(0);
         servicedFloor.setServiced(false);
         Resource<Boolean> booleanResource = repository.updateServicedFloor(servicedFloor);
+        ServicedFloor servicedFloorAfter = repository.getElevatorControlSystem().getData().getElevator(0).getServicedFloor(0);
 
         assertNotNull(booleanResource);
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
-        assertTrue(booleanResource.getData());
-
-        servicedFloor = repository.getElevatorControlSystem().getData().getElevator(0).getServicedFloor(0);
-        assertFalse(servicedFloor.isServiced());
+        assertEquals(true, booleanResource.getData());
+        assertEquals(false, servicedFloorAfter.isServiced());
     }
 
     @Test
@@ -64,13 +63,12 @@ public class ElevatorRepositoryTest {
         Elevator elevator = repository.getElevatorControlSystem().getData().getElevator(0);
         elevator.setTargetFloor(1);
         Resource<Boolean> booleanResource = repository.updateTargetFloor(elevator);
+        Elevator elevatorAfter = repository.getElevatorControlSystem().getData().getElevator(0);
 
         assertNotNull(booleanResource);
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
-        assertTrue(booleanResource.getData());
-
-        elevator = repository.getElevatorControlSystem().getData().getElevator(0);
-        assertEquals(1, elevator.getTargetFloor());
+        assertEquals(true, booleanResource.getData());
+        assertEquals(1, elevatorAfter.getTargetFloor());
     }
 }

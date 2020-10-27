@@ -1,6 +1,5 @@
 package at.fhhagenberg.sqe;
 
-import at.fhhagenberg.sqe.util.SystemInfo;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,10 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        var javaVersion = SystemInfo.javaVersion();
-        var javafxVersion = SystemInfo.javafxVersion();
-
-        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+        var label = new Label("Hello, JavaFX, running on Java.");
         var layout = new BorderPane(label);
         var button = new Button("Click me!");
         button.setOnAction(evt -> button.setText("Clicked!"));

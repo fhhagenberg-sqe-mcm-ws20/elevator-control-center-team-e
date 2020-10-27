@@ -2,7 +2,7 @@ package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.entity.BuildingFloor;
 import at.fhhagenberg.sqe.entity.Elevator;
-import at.fhhagenberg.sqe.rmi.IElevator;
+import at.fhhagenberg.sqe.IElevator;
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem;
 import com.google.inject.Inject;
 

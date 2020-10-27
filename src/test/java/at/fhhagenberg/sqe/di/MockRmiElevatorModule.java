@@ -1,16 +1,22 @@
 package at.fhhagenberg.sqe.di;
 
+import at.fhhagenberg.sqe.api.CachedElevatorControl;
 import at.fhhagenberg.sqe.entity.*;
-import at.fhhagenberg.sqe.rmi.IElevator;
-import at.fhhagenberg.sqe.rmi.MockElevatorControl;
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
+import at.fhhagenberg.sqe.IElevator;
+import at.fhhagenberg.sqe.MockElevatorControl;
+import com.google.inject.*;
 
 public class MockRmiElevatorModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(IElevator.class).to(MockElevatorControl.class);
         bind(ElevatorControlSystem.class).toProvider(ElevatorControlSystemProvider.class).in(Singleton.class);
+        bind(IElevator.class).to(CachedElevatorControl.class);
+    }
+
+    @Provides
+    @RealIElevator
+    public IElevator provideRealIElevator(Injector injector) {
+        return injector.getInstance(MockElevatorControl.class);
     }
 }
