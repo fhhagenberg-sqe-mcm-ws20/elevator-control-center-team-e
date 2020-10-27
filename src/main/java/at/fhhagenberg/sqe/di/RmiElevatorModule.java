@@ -1,6 +1,7 @@
 package at.fhhagenberg.sqe.di;
 
 import at.fhhagenberg.sqe.IElevator;
+import at.fhhagenberg.sqe.api.CachedElevatorControl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
@@ -8,7 +9,7 @@ import com.google.inject.Provides;
 public class RmiElevatorModule extends AbstractModule {
     @Override
     protected void configure() {
-        // bind(IElevator.class).to(CachedElevatorControl.class);
+        bind(IElevator.class).to(CachedElevatorControl.class);
     }
 
     @Provides
