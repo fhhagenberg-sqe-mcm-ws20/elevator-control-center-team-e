@@ -37,3 +37,7 @@ mvn clean package
 ```
 
 The resulting archive (`.jar` file) is in the `target` directory.
+
+### Tasks
+
+For tasks see the Trello board on: https://trello.com/b/JW4NSbQt/elevator-control-system
