@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
+import org.jetbrains.annotations.NotNull;
 import sqelevator.IElevator;
 import at.fhhagenberg.sqe.entity.FloorButton;
 import com.google.inject.Inject;
@@ -19,21 +20,24 @@ public class FloorButtonServiceImpl implements FloorButtonService {
     }
 
     @Override
+    @NotNull
     public List<FloorButton> getAll(int elevatorNumber) throws RemoteException {
         int totalNumberOfElevators = elevatorControl.getElevatorNum();
         int totalNumberOfFloors = elevatorControl.getFloorNum();
+        if (totalNumberOfFloors < 0) {
+            totalNumberOfFloors = 0;
+        }
+        List<FloorButton> buttons = new ArrayList<>(totalNumberOfFloors);
 
         if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators) {
-            List<FloorButton> buttons = new ArrayList<>(totalNumberOfFloors);
             for (int floorNumber = 0; floorNumber < totalNumberOfFloors; floorNumber++) {
                 FloorButton button = get(elevatorNumber, floorNumber);
                 if (button != null) {
                     buttons.add(button);
                 }
             }
-            return buttons;
         }
-        return null;
+        return buttons;
     }
 
     @Override

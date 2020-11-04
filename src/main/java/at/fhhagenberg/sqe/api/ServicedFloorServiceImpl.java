@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
+import org.jetbrains.annotations.NotNull;
 import sqelevator.IElevator;
 import at.fhhagenberg.sqe.entity.ServicedFloor;
 import com.google.inject.Inject;
@@ -19,18 +20,21 @@ public class ServicedFloorServiceImpl implements ServicedFloorService {
     }
 
     @Override
+    @NotNull
     public List<ServicedFloor> getAll(int elevatorNumber) throws RemoteException {
         int totalNumberOfElevators = elevatorControl.getElevatorNum();
         int totalNumberOfFloors = elevatorControl.getFloorNum();
+        if (totalNumberOfFloors < 0) {
+            totalNumberOfFloors = 0;
+        }
+        List<ServicedFloor> result = new ArrayList<>(totalNumberOfFloors);
 
         if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfElevators) {
-            List<ServicedFloor> result = new ArrayList<>(totalNumberOfFloors);
             for (int floorNumber = 0; floorNumber < totalNumberOfFloors; floorNumber++) {
                 result.add(get(elevatorNumber, floorNumber));
             }
-            return result;
         }
-        return null;
+        return result;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class ServicedFloorServiceImpl implements ServicedFloorService {
     }
 
     @Override
-    public void updateServicedFloor(ServicedFloor servicedFloor) throws RemoteException {
+    public void updateServicedFloor(@NotNull ServicedFloor servicedFloor) throws RemoteException {
         elevatorControl.setServicesFloors(servicedFloor.getElevatorNumber(), servicedFloor.getFloorNumber(), servicedFloor.isServiced());
     }
 }
