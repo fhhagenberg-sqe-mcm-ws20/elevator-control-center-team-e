@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.repository;
 
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import at.fhhagenberg.sqe.api.ElevatorControlSystemService;
 import at.fhhagenberg.sqe.api.ElevatorService;
 import at.fhhagenberg.sqe.api.ServicedFloorService;

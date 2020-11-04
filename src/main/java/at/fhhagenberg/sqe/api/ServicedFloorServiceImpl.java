@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import at.fhhagenberg.sqe.entity.ServicedFloor;
 import com.google.inject.Inject;
 import java.rmi.RemoteException;

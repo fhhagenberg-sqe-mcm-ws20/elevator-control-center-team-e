@@ -1,7 +1,7 @@
 package at.fhhagenberg.sqe.di;
 
 import at.fhhagenberg.sqe.entity.*;
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import at.fhhagenberg.sqe.MockElevatorControl;
 import com.google.inject.*;
 
