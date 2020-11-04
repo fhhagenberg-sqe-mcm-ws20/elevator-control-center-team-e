@@ -16,6 +16,7 @@ import sqelevator.IElevator;
 import java.rmi.RemoteException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ElevatorRepositoryTest {
 
@@ -40,9 +41,24 @@ public class ElevatorRepositoryTest {
     }
 
     @Test
-    public void testGetElevatorControlSystemDifferentClockTicks() {
+    public void testGetElevatorControlSystemSameClockTicks() throws RemoteException {
         Resource<ElevatorControlSystem> elevatorControlSystem1 = repository.getElevatorControlSystem();
-        // TODO
+        Resource<ElevatorControlSystem> elevatorControlSystem2 = repository.getElevatorControlSystem();
+
+        assertEquals(false, elevatorControlSystem1 == elevatorControlSystem2);
+        assertEquals(false, elevatorControlSystem1.getData() == elevatorControlSystem2.getData());
+    }
+
+    @Test
+    public void testGetElevatorControlSystemDifferentClockTicks() throws RemoteException {
+        Resource<ElevatorControlSystem> elevatorControlSystem1 = repository.getElevatorControlSystem();
+
+        when(realIElevator.getClockTick()).thenReturn(1L).thenReturn(2L);
+
+        Resource<ElevatorControlSystem> elevatorControlSystem2 = repository.getElevatorControlSystem();
+
+        assertEquals(true, elevatorControlSystem1 == elevatorControlSystem2);
+        assertEquals(true, elevatorControlSystem1.getData() == elevatorControlSystem2.getData());
     }
 
     @Test
