@@ -11,16 +11,16 @@ import org.testfx.matcher.control.LabeledMatchers;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-@ExtendWith(ApplicationExtension.class)
+//@ExtendWith(ApplicationExtension.class)
 public class AppTest {
-    private Button button;
+    //private Button button;
 
     /**
      * Will be called with {@code @Before} semantics, i. e. before each test method.
      *
      * @param stage - Will be injected by the test runner.
      */
-    @Start
+    //@Start
     public void start(Stage stage) {
         // var app = new App();
         // app.start(stage);
@@ -29,7 +29,7 @@ public class AppTest {
     /**
      * @param robot - Will be injected by the test runner.
      */
-    @Test
+    //@Test
     public void testButtonWithText(FxRobot robot) {
         // FxAssert.verifyThat(".button", LabeledMatchers.hasText("Click me!"));
     }
@@ -37,7 +37,7 @@ public class AppTest {
     /**
      * @param robot - Will be injected by the test runner.
      */
-    @Test
+    //@Test
     public void testButtonClick(FxRobot robot) {
         // when:
         // robot.clickOn(".button");
