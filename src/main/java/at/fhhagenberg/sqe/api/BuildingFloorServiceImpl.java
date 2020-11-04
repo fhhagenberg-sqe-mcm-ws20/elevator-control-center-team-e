@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
+import org.jetbrains.annotations.NotNull;
 import sqelevator.IElevator;
 import at.fhhagenberg.sqe.entity.BuildingFloor;
 import com.google.inject.Inject;
@@ -19,6 +20,7 @@ public class BuildingFloorServiceImpl implements BuildingFloorService {
     }
 
     @Override
+    @NotNull
     public List<BuildingFloor> getAll() throws RemoteException {
         int totalNumberOfFloors = elevatorControl.getFloorNum();
         List<BuildingFloor> floors = new ArrayList<>(totalNumberOfFloors);

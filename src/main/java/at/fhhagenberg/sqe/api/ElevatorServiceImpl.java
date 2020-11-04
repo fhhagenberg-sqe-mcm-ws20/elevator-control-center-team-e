@@ -2,6 +2,7 @@ package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.entity.Direction;
 import at.fhhagenberg.sqe.entity.DoorState;
+import org.jetbrains.annotations.NotNull;
 import sqelevator.IElevator;
 import at.fhhagenberg.sqe.entity.Elevator;
 import com.google.inject.Inject;
@@ -27,6 +28,7 @@ public class ElevatorServiceImpl implements ElevatorService {
     }
 
     @Override
+    @NotNull
     public List<Elevator> getAll() throws RemoteException {
         int totalNumberOfElevators = elevatorControl.getElevatorNum();
 
@@ -61,12 +63,12 @@ public class ElevatorServiceImpl implements ElevatorService {
     }
 
     @Override
-    public void updateCommittedDirection(Elevator elevator) throws RemoteException {
+    public void updateCommittedDirection(@NotNull Elevator elevator) throws RemoteException {
         elevatorControl.setCommittedDirection(elevator.getElevatorNumber(), elevator.getCommittedDirection().getDirection());
     }
 
     @Override
-    public void updateTargetFloor(Elevator elevator) throws RemoteException {
+    public void updateTargetFloor(@NotNull Elevator elevator) throws RemoteException {
         elevatorControl.setTarget(elevator.getElevatorNumber(), elevator.getTargetFloor());
     }
 }

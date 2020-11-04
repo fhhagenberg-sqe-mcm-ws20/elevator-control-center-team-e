@@ -2,10 +2,10 @@ package at.fhhagenberg.sqe.entity
 
 data class Elevator(
         val elevatorNumber: Int,
-        var committedDirection: Direction?,
+        var committedDirection: Direction,
         val acceleration: Int,
         val buttons: List<FloorButton>,
-        val doorState: DoorState?,
+        val doorState: DoorState,
         val currentFloor: Int,
         val currentPosition: Int,
         val currentWeight: Int,
@@ -19,10 +19,10 @@ data class Elevator(
 
     class Builder {
         private var elevatorNumber = 0
-        private var committedDirection: Direction = Direction.UNCOMMITTED
+        private var committedDirection: Direction = Direction.UNKNOWN
         private var acceleration = 0
         private var buttons: List<FloorButton> = emptyList()
-        private var doorState: DoorState = DoorState.CLOSED
+        private var doorState: DoorState = DoorState.UNKNOWN
         private var currentFloor = 0
         private var currentPosition = 0
         private var currentWeight = 0

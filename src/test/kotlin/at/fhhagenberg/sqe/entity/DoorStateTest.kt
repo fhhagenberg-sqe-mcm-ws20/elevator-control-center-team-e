@@ -13,6 +13,6 @@ class DoorStateTest {
     @Test
     fun testInvalidValueOf() {
         val doorState = DoorState.valueOf(-10)
-        assertEquals(null, doorState)
+        assertEquals(DoorState.UNKNOWN, doorState)
     }
 }
