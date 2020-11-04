@@ -1,10 +1,9 @@
-package at.fhhagenberg.sqe.di;
+package at.fhhagenberg.sqe.di
 
-import com.google.inject.*;
+import com.google.inject.AbstractModule
 
-public class RmiElevatorModule extends AbstractModule {
-    @Override
-    protected void configure() {
+class RmiElevatorModule : AbstractModule() {
+    override fun configure() {
         // TODO: Bind IElevator to RMI IElevator implementation
         // bind(Key.get(IElevator.class, RealIElevator.class)).to().in(Singleton.class);
     }
