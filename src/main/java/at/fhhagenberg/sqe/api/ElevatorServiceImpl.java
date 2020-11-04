@@ -62,7 +62,7 @@ public class ElevatorServiceImpl implements ElevatorService {
 
     @Override
     public void updateCommittedDirection(Elevator elevator) throws RemoteException {
-        elevatorControl.setCommittedDirection(elevator.getElevatorNumber(), elevator.getCommittedDirection().direction);
+        elevatorControl.setCommittedDirection(elevator.getElevatorNumber(), elevator.getCommittedDirection().getDirection());
     }
 
     @Override

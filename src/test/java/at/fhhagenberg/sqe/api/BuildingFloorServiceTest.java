@@ -36,6 +36,8 @@ public class BuildingFloorServiceTest{
 
             assertNotNull(floor);
             assertEquals(floor.getFloorNumber(), 1);
+            assertEquals(floor.isDownActive(), false);
+            assertEquals(floor.isUpActive(), false);
         }
 
         @Test

@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import at.fhhagenberg.sqe.di.DI;
 import at.fhhagenberg.sqe.di.RealIElevator;
 import at.fhhagenberg.sqe.entity.Direction;
+import at.fhhagenberg.sqe.entity.DoorState;
 import at.fhhagenberg.sqe.entity.Elevator;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -38,7 +39,21 @@ public class ElevatorServiceTest {
         Elevator elevator = service.get(0);
 
         assertNotNull(elevator);
+        assertEquals(0, elevator.getElevatorNumber());
         assertEquals(1, elevator.getCurrentFloor());
+        assertEquals(0, elevator.getTargetFloor());
+        assertEquals(Direction.DOWN, elevator.getCommittedDirection());
+        assertEquals(1, elevator.getAcceleration());
+        assertEquals(8, elevator.getCapacity());
+        assertEquals(1, elevator.getCurrentSpeed());
+        assertEquals(DoorState.CLOSED, elevator.getDoorState());
+        assertEquals(1, elevator.getCurrentFloor());
+        assertEquals(10, elevator.getCurrentPosition());
+        assertEquals(500, elevator.getCurrentWeight());
+        assertEquals(2, elevator.getButtons().size());
+        assertEquals(0, elevator.getButton(0).getFloorNumber());
+        assertEquals(2, elevator.getServicedFloors().size());
+        assertEquals(0, elevator.getServicedFloor(0).getFloorNumber());
     }
 
     @Test
@@ -47,7 +62,7 @@ public class ElevatorServiceTest {
         elevator.setCommittedDirection(Direction.UP);
         service.updateCommittedDirection(elevator);
 
-        verify(realIElevator).setCommittedDirection(0, Direction.UP.direction);
+        verify(realIElevator).setCommittedDirection(0, Direction.UP.getDirection());
     }
 
     @Test

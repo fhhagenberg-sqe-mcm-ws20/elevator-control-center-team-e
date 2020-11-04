@@ -71,7 +71,7 @@ public class ElevatorRepositoryTest {
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
         assertEquals(true, booleanResource.getData());
-        verify(realIElevator).setCommittedDirection(0, Direction.DOWN.direction);
+        verify(realIElevator).setCommittedDirection(0, Direction.DOWN.getDirection());
     }
 
     @Test

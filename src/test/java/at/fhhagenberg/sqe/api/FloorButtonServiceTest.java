@@ -21,12 +21,19 @@ class FloorButtonServiceTest {
 
     @Test
     public void testGet() throws RemoteException {
-        FloorButton floorButtonValid = service.get(0, 0);
-        FloorButton floorButtonInvalid = service.get(-1, 0);
+        FloorButton floorButton = service.get(0, 0);
 
-        assertNotNull(floorButtonValid);
-        assertEquals(0, floorButtonValid.getElevatorNumber());
-        assertNull(floorButtonInvalid);
+        assertNotNull(floorButton);
+        assertEquals(0, floorButton.getElevatorNumber());
+        assertEquals(0, floorButton.getFloorNumber());
+        assertEquals(false, floorButton.isActive());
+    }
+
+    @Test
+    public void testGetInvalid() throws RemoteException {
+        FloorButton floorButton = service.get(-1, 0);
+
+        assertNull(floorButton);
     }
 
     @Test

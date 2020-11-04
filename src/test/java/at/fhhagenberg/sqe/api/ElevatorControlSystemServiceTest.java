@@ -27,5 +27,13 @@ public class ElevatorControlSystemServiceTest {
         assertNotNull(elevator);
         assertEquals(2, elevatorControlSystem.getNumberOfElevators());
         assertEquals(2, elevatorControlSystem.getNumberOfFloors());
+        assertEquals(1, elevatorControlSystem.getClockTick());
+        assertEquals(20, elevatorControlSystem.getFloorHeight());
+        assertEquals(2, elevatorControlSystem.getNumberOfFloors());
+        assertEquals(2, elevatorControlSystem.getFloors().size());
+        assertEquals(0, elevatorControlSystem.getFloor(0).getFloorNumber());
+        assertEquals(2, elevatorControlSystem.getNumberOfElevators());
+        assertEquals(2, elevatorControlSystem.getElevators().size());
+        assertEquals(0, elevatorControlSystem.getElevator(0).getElevatorNumber());
     }
 }

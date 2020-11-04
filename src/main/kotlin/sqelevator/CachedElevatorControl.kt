@@ -1,6 +1,5 @@
-package at.fhhagenberg.sqe.api
+package sqelevator
 
-import sqelevator.IElevator
 import at.fhhagenberg.sqe.di.RealIElevator
 import com.google.inject.Inject
 
