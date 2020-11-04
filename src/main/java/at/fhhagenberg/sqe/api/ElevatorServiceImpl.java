@@ -43,18 +43,18 @@ public class ElevatorServiceImpl implements ElevatorService {
 
         if (elevatorNumber >= 0 && elevatorNumber < totalNumberOfFloors) {
             return new Elevator.Builder()
-                    .setElevatorNumber(elevatorNumber)
-                    .setAcceleration(elevatorControl.getElevatorAccel(elevatorNumber))
-                    .setButtons(floorButtonService.getAll(elevatorNumber))
-                    .setCapacity(elevatorControl.getElevatorCapacity(elevatorNumber))
-                    .setCommittedDirection(Direction.valueOf(elevatorControl.getCommittedDirection(elevatorNumber)))
-                    .setCurrentFloor(elevatorControl.getElevatorFloor(elevatorNumber))
-                    .setCurrentPosition(elevatorControl.getElevatorPosition(elevatorNumber))
-                    .setCurrentSpeed(elevatorControl.getElevatorSpeed(elevatorNumber))
-                    .setCurrentWeight(elevatorControl.getElevatorWeight(elevatorNumber))
-                    .setDoorState(DoorState.valueOf(elevatorControl.getElevatorDoorStatus(elevatorNumber)))
-                    .setServicedFloors(servicedFloorService.getAll(elevatorNumber))
-                    .setTargetFloor(elevatorControl.getTarget(elevatorNumber))
+                    .elevatorNumber(elevatorNumber)
+                    .acceleration(elevatorControl.getElevatorAccel(elevatorNumber))
+                    .buttons(floorButtonService.getAll(elevatorNumber))
+                    .capacity(elevatorControl.getElevatorCapacity(elevatorNumber))
+                    .committedDirection(Direction.valueOf(elevatorControl.getCommittedDirection(elevatorNumber)))
+                    .currentFloor(elevatorControl.getElevatorFloor(elevatorNumber))
+                    .currentPosition(elevatorControl.getElevatorPosition(elevatorNumber))
+                    .currentSpeed(elevatorControl.getElevatorSpeed(elevatorNumber))
+                    .currentWeight(elevatorControl.getElevatorWeight(elevatorNumber))
+                    .doorState(DoorState.valueOf(elevatorControl.getElevatorDoorStatus(elevatorNumber)))
+                    .servicedFloors(servicedFloorService.getAll(elevatorNumber))
+                    .targetFloor(elevatorControl.getTarget(elevatorNumber))
                     .build();
         }
         return null;
