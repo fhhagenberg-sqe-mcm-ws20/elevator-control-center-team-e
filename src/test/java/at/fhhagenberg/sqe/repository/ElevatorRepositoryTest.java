@@ -31,6 +31,12 @@ public class ElevatorRepositoryTest {
     }
 
     @Test
+    public void testGetElevatorControlSystemDifferentClockTicks() {
+        Resource<ElevatorControlSystem> elevatorControlSystem1 = repository.getElevatorControlSystem();
+        // TODO
+    }
+
+    @Test
     public void testUpdateCommittedDirection() {
         Elevator elevator = repository.getElevatorControlSystem().getData().getElevator(0);
         elevator.setCommittedDirection(Direction.DOWN);

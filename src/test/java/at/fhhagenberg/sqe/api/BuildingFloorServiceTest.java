@@ -1,7 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.di.DI;
-import at.fhhagenberg.sqe.di.ElevatorControlSystemProvider;
 import at.fhhagenberg.sqe.entity.BuildingFloor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -24,24 +23,22 @@ public class BuildingFloorServiceTest{
         List<BuildingFloor> floors = buildingFloorService.getAll();
 
         assertNotNull(floors);
-        assertEquals(ElevatorControlSystemProvider.FLOORS_COUNT, floors.size());
+        assertEquals(2, floors.size());
     }
 
     @Nested
     class GetTest {
         @Test
         public void testGetRegular() throws RemoteException {
-            int floorNumber = ElevatorControlSystemProvider.FLOORS_COUNT - 1;
-            BuildingFloor floor = buildingFloorService.get(floorNumber);
+            BuildingFloor floor = buildingFloorService.get(1);
 
             assertNotNull(floor);
-            assertEquals(floor.getFloorNumber(), floorNumber);
+            assertEquals(floor.getFloorNumber(), 1);
         }
 
         @Test
         public void testGetInvalidFloorNumber() throws RemoteException {
-            int floorNumber = -1;
-            BuildingFloor floor = buildingFloorService.get(floorNumber);
+            BuildingFloor floor = buildingFloorService.get(-1);
 
             assertNull(floor);
         }

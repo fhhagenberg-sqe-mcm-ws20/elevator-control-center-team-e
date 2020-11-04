@@ -1,7 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.di.DI;
-import at.fhhagenberg.sqe.di.ElevatorControlSystemProvider;
 import at.fhhagenberg.sqe.entity.Elevator;
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +22,7 @@ public class ElevatorControlSystemServiceTest {
         Elevator elevator = elevatorControlSystem.getElevator(0);
 
         assertNotNull(elevator);
-        assertEquals(ElevatorControlSystemProvider.ELEVATORS_COUNT, elevatorControlSystem.getNumberOfElevators());
+        assertEquals(2, elevatorControlSystem.getNumberOfElevators());
+        assertEquals(2, elevatorControlSystem.getNumberOfFloors());
     }
 }

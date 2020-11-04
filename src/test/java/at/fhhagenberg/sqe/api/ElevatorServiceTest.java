@@ -1,7 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.di.DI;
-import at.fhhagenberg.sqe.di.ElevatorControlSystemProvider;
 import at.fhhagenberg.sqe.entity.Direction;
 import at.fhhagenberg.sqe.entity.Elevator;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +21,7 @@ public class ElevatorServiceTest {
     public void testGetAll() throws RemoteException {
         List<Elevator> elevators = service.getAll();
 
-        assertEquals(ElevatorControlSystemProvider.ELEVATORS_COUNT, elevators.size());
+        assertEquals(2, elevators.size());
     }
 
     @Test
@@ -30,17 +29,17 @@ public class ElevatorServiceTest {
         Elevator elevator = service.get(0);
 
         assertNotNull(elevator);
-        assertEquals(0,elevator.getCurrentFloor());
+        assertEquals(1, elevator.getCurrentFloor());
     }
 
     @Test
     public void testUpdateCommittedDirection() throws RemoteException {
         Elevator elevator = service.get(0);
-        elevator.setCommittedDirection(Direction.UP);
+        elevator.setCommittedDirection(Direction.DOWN);
         service.updateCommittedDirection(elevator);
         elevator = service.get(0);
 
-        assertEquals(Direction.UP,elevator.getCommittedDirection());
+        assertEquals(Direction.UP, elevator.getCommittedDirection());
     }
 
     @Test

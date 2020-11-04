@@ -1,7 +1,6 @@
 package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.di.DI;
-import at.fhhagenberg.sqe.di.ElevatorControlSystemProvider;
 import at.fhhagenberg.sqe.entity.ServicedFloor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ public class ServicedFloorServiceTest {
     public void testGetAll() throws RemoteException {
         List<ServicedFloor> servicedFloors = servicedFloorService.getAll(0);
 
-        assertEquals(ElevatorControlSystemProvider.FLOORS_COUNT, servicedFloors.size());
+        assertEquals(2, servicedFloors.size());
     }
 
     @Test
