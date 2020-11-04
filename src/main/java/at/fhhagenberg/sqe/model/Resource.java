@@ -23,6 +23,10 @@ public class Resource<TData> {
         return status;
     }
 
+    public static <TData> Resource<TData> loading(TData data) {
+        return new Resource(data, null, Status.LOADING);
+    }
+
     public static <TData> Resource<TData> success(TData data) {
         return new Resource(data, null, Status.SUCCESS);
     }
