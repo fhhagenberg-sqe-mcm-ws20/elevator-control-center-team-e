@@ -2,6 +2,7 @@ package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.di.DI;
 import at.fhhagenberg.sqe.entity.FloorButton;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.rmi.RemoteException;
@@ -14,7 +15,8 @@ class FloorButtonServiceTest {
 
     @BeforeEach
     public void setUp() {
-        service = DI.get(FloorButtonService.class);
+        Injector injector = DI.getInjector();
+        service = injector.getInstance(FloorButtonService.class);
     }
 
     @Test

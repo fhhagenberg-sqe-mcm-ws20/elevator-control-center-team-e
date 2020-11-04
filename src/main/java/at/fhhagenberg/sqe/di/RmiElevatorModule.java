@@ -1,18 +1,11 @@
 package at.fhhagenberg.sqe.di;
 
-import sqelevator.IElevator;
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
+import com.google.inject.*;
 
 public class RmiElevatorModule extends AbstractModule {
     @Override
-    protected void configure() {}
-
-    @Provides
-    @RealIElevator
-    public IElevator provideRealIElevator(Injector injector) {
-        throw new RuntimeException("Not implemented!");
+    protected void configure() {
         // TODO: Bind IElevator to RMI IElevator implementation
+        // bind(Key.get(IElevator.class, RealIElevator.class)).to().in(Singleton.class);
     }
 }

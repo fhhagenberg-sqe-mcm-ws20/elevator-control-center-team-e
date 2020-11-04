@@ -1,23 +1,32 @@
 package at.fhhagenberg.sqe.repository;
 
 import at.fhhagenberg.sqe.di.DI;
+import at.fhhagenberg.sqe.di.RealIElevator;
 import at.fhhagenberg.sqe.entity.Direction;
 import at.fhhagenberg.sqe.entity.Elevator;
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem;
 import at.fhhagenberg.sqe.entity.ServicedFloor;
 import at.fhhagenberg.sqe.model.Resource;
 import at.fhhagenberg.sqe.model.Status;
+import com.google.inject.Injector;
+import com.google.inject.Key;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sqelevator.IElevator;
+import java.rmi.RemoteException;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 public class ElevatorRepositoryTest {
 
     private ElevatorRepository repository;
+    private IElevator realIElevator;
 
     @BeforeEach
     public void setUp() {
-        repository = DI.get(ElevatorRepository.class);
+        Injector injector = DI.getInjector();
+        repository = injector.getInstance(ElevatorRepository.class);
+        realIElevator = injector.getInstance(Key.get(IElevator.class, RealIElevator.class));
     }
 
     @Test
@@ -37,44 +46,41 @@ public class ElevatorRepositoryTest {
     }
 
     @Test
-    public void testUpdateCommittedDirection() {
+    public void testUpdateCommittedDirection() throws RemoteException {
         Elevator elevator = repository.getElevatorControlSystem().getData().getElevator(0);
         elevator.setCommittedDirection(Direction.DOWN);
         Resource<Boolean> booleanResource = repository.updateCommittedDirection(elevator);
-        Elevator elevatorAfter = repository.getElevatorControlSystem().getData().getElevator(0);
 
         assertNotNull(booleanResource);
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
         assertEquals(true, booleanResource.getData());
-        assertEquals(Direction.DOWN, elevatorAfter.getCommittedDirection());
+        verify(realIElevator).setCommittedDirection(0, Direction.DOWN.direction);
     }
 
     @Test
-    public void testUpdateServicedFloor() {
+    public void testUpdateServicedFloor() throws RemoteException {
         ServicedFloor servicedFloor = repository.getElevatorControlSystem().getData().getElevator(0).getServicedFloor(0);
         servicedFloor.setServiced(false);
         Resource<Boolean> booleanResource = repository.updateServicedFloor(servicedFloor);
-        ServicedFloor servicedFloorAfter = repository.getElevatorControlSystem().getData().getElevator(0).getServicedFloor(0);
 
         assertNotNull(booleanResource);
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
         assertEquals(true, booleanResource.getData());
-        assertEquals(false, servicedFloorAfter.isServiced());
+        verify(realIElevator).setServicesFloors(0, 0, false);
     }
 
     @Test
-    public void testUpdateTargetFloor() {
+    public void testUpdateTargetFloor() throws RemoteException {
         Elevator elevator = repository.getElevatorControlSystem().getData().getElevator(0);
-        elevator.setTargetFloor(1);
+        elevator.setTargetFloor(0);
         Resource<Boolean> booleanResource = repository.updateTargetFloor(elevator);
-        Elevator elevatorAfter = repository.getElevatorControlSystem().getData().getElevator(0);
 
         assertNotNull(booleanResource);
         assertEquals(Status.SUCCESS, booleanResource.getStatus());
         assertNull(booleanResource.getError());
         assertEquals(true, booleanResource.getData());
-        assertEquals(1, elevatorAfter.getTargetFloor());
+        verify(realIElevator).setTarget(0, 0);
     }
 }
