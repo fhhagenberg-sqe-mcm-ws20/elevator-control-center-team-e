@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.repository;
 
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import at.fhhagenberg.sqe.api.ElevatorControlSystemService;
 import at.fhhagenberg.sqe.api.ElevatorService;
 import at.fhhagenberg.sqe.api.ServicedFloorService;
@@ -17,6 +17,8 @@ public class ElevatorRepository {
     private final ServicedFloorService servicedFloorService;
     private final IElevator elevatorControl;
 
+    private Resource<ElevatorControlSystem> lastElevatorControlSystem = Resource.loading(null);
+
     @Inject
     public ElevatorRepository(
             ElevatorControlSystemService elevatorControlSystemService,
@@ -32,15 +34,13 @@ public class ElevatorRepository {
 
     public Resource<ElevatorControlSystem> getElevatorControlSystem() {
         try {
-            long diff;
-            ElevatorControlSystem data;
-            do {
-                long clockTick1 = elevatorControl.getClockTick();
-                data = elevatorControlSystemService.get();
-                long clockTick2 = elevatorControl.getClockTick();
-                diff = clockTick2 - clockTick1;
-            } while(diff != 0L);
-            return Resource.success(data);
+            long clockTick1 = elevatorControl.getClockTick();
+            ElevatorControlSystem data = elevatorControlSystemService.get();
+            long clockTick2 = elevatorControl.getClockTick();
+            if (clockTick1 == clockTick2) {
+                lastElevatorControlSystem = Resource.success(data);
+            }
+            return lastElevatorControlSystem;
         } catch (Exception exception) {
             return Resource.error(exception);
         }

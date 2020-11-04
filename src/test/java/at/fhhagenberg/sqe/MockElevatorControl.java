@@ -3,6 +3,7 @@ package at.fhhagenberg.sqe;
 import at.fhhagenberg.sqe.entity.*;
 import at.fhhagenberg.sqe.util.CollectionUtils;
 import com.google.inject.Inject;
+import sqelevator.IElevator;
 import java.rmi.RemoteException;
 import java.util.List;
 

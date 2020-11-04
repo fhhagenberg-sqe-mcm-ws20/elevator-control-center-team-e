@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.di;
 
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import at.fhhagenberg.sqe.api.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
