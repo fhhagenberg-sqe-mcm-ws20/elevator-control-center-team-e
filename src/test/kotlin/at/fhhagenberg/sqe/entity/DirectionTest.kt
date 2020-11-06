@@ -14,6 +14,7 @@ class DirectionTest {
     @Test
     fun testInvalidValueOf() {
         val direction = Direction.valueOf(-10)
+
         assertEquals(Direction.UNKNOWN, direction)
     }
 }
