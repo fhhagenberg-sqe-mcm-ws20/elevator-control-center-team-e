@@ -8,12 +8,12 @@ data class Resource<TData>(
 
     companion object {
         @JvmStatic
-        fun <TData> loading(data: TData): Resource<TData> {
+        fun <TData> loading(data: TData?): Resource<TData> {
             return Resource(data, null, Status.LOADING)
         }
 
         @JvmStatic
-        fun <TData> success(data: TData): Resource<TData> {
+        fun <TData> success(data: TData?): Resource<TData> {
             return Resource(data, null, Status.SUCCESS)
         }
 
