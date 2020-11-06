@@ -41,6 +41,6 @@ class FloorButtonServiceTest {
         List<FloorButton> floorButtons = service.getAll(0);
         floorButtons = service.getAll(-1);
 
-        assertNull(floorButtons);
+        assertEquals(0, floorButtons.size());
     }
 }
