@@ -1,8 +1,8 @@
 package at.fhhagenberg.sqe.api;
 
 import at.fhhagenberg.sqe.di.DI;
-import at.fhhagenberg.sqe.di.ElevatorControlSystemProvider;
 import at.fhhagenberg.sqe.entity.BuildingFloor;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,36 +12,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BuildingFloorServiceTest{
 
-    private BuildingFloorService buildingFloorService;
+    private BuildingFloorService service;
 
     @BeforeEach
     public void setUp() {
-        buildingFloorService = DI.get(BuildingFloorService.class);
+        Injector injector = DI.getInjector();
+        service = injector.getInstance(BuildingFloorService.class);
     }
 
     @Test
     public void testGetAll() throws RemoteException {
-        List<BuildingFloor> floors = buildingFloorService.getAll();
+        List<BuildingFloor> floors = service.getAll();
 
         assertNotNull(floors);
-        assertEquals(ElevatorControlSystemProvider.FLOORS_COUNT, floors.size());
+        assertEquals(2, floors.size());
     }
 
     @Nested
     class GetTest {
         @Test
         public void testGetRegular() throws RemoteException {
-            int floorNumber = ElevatorControlSystemProvider.FLOORS_COUNT - 1;
-            BuildingFloor floor = buildingFloorService.get(floorNumber);
+            BuildingFloor floor = service.get(1);
 
             assertNotNull(floor);
-            assertEquals(floor.getFloorNumber(), floorNumber);
+            assertEquals(floor.getFloorNumber(), 1);
+            assertEquals(floor.isDownActive(), false);
+            assertEquals(floor.isUpActive(), false);
         }
 
         @Test
         public void testGetInvalidFloorNumber() throws RemoteException {
-            int floorNumber = -1;
-            BuildingFloor floor = buildingFloorService.get(floorNumber);
+            BuildingFloor floor = service.get(-1);
 
             assertNull(floor);
         }
