@@ -20,7 +20,6 @@
         <sonar.sources>src/main/java,src/main/kotlin</sonar.sources>
         <sonar.java.tests>src/test/java,src/test/kotlin</sonar.java.tests>
         <sonar.java.test.binaries>target/test-classes</sonar.java.test.binaries>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
