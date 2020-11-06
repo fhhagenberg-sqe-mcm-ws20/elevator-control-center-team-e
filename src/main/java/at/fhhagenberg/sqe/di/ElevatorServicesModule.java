@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.di;
 
+import sqelevator.CachedElevatorControl;
 import sqelevator.IElevator;
 import at.fhhagenberg.sqe.api.*;
 import com.google.inject.AbstractModule;
