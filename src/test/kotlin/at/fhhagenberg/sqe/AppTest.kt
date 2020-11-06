@@ -1,27 +1,18 @@
-package at.fhhagenberg.sqe;
+package at.fhhagenberg.sqe
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxAssert;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.control.LabeledMatchers;
-
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import javafx.stage.Stage
+import org.testfx.api.FxRobot
 
 //@ExtendWith(ApplicationExtension.class)
-public class AppTest {
+class AppTest {
     //private Button button;
-
     /**
-     * Will be called with {@code @Before} semantics, i. e. before each test method.
+     * Will be called with `@Before` semantics, i. e. before each test method.
      *
      * @param stage - Will be injected by the test runner.
      */
     //@Start
-    public void start(Stage stage) {
+    fun start(stage: Stage?) {
         // var app = new App();
         // app.start(stage);
     }
@@ -30,7 +21,7 @@ public class AppTest {
      * @param robot - Will be injected by the test runner.
      */
     //@Test
-    public void testButtonWithText(FxRobot robot) {
+    fun testButtonWithText(robot: FxRobot?) {
         // FxAssert.verifyThat(".button", LabeledMatchers.hasText("Click me!"));
     }
 
@@ -38,7 +29,7 @@ public class AppTest {
      * @param robot - Will be injected by the test runner.
      */
     //@Test
-    public void testButtonClick(FxRobot robot) {
+    fun testButtonClick(robot: FxRobot?) {
         // when:
         // robot.clickOn(".button");
 

@@ -14,7 +14,7 @@ class CachedElevatorControlTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = DI.injector
+        val injector = DI.createInjector()
         cachedElevatorControl = injector.getInstance(IElevator::class.java)
         realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
     }

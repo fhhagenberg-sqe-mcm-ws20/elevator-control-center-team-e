@@ -12,11 +12,8 @@ class FloorButtonServiceImpl @Inject constructor(
     @Throws(RemoteException::class)
     override fun getAll(elevatorNumber: Int): List<FloorButton> {
         val totalNumberOfElevators = elevatorControl.elevatorNum
-        var totalNumberOfFloors = elevatorControl.floorNum
-        if (totalNumberOfFloors < 0) {
-            totalNumberOfFloors = 0
-        }
-        val floorButtons: MutableList<FloorButton> = ArrayList(totalNumberOfFloors)
+        val totalNumberOfFloors = elevatorControl.floorNum
+        val floorButtons: MutableList<FloorButton> = ArrayList(totalNumberOfFloors.coerceAtLeast(0))
         if (elevatorNumber in 0 until totalNumberOfElevators) {
             for (floorNumber in 0 until totalNumberOfFloors) {
                 get(elevatorNumber, floorNumber)?.let { button ->

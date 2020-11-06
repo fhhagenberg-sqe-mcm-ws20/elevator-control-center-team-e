@@ -12,7 +12,7 @@ class BuildingFloorServiceImpl @Inject constructor(
     @Throws(RemoteException::class)
     override fun getAll(): List<BuildingFloor> {
         val totalNumberOfFloors = elevatorControl.floorNum
-        val buildingFloors: MutableList<BuildingFloor> = ArrayList(totalNumberOfFloors)
+        val buildingFloors: MutableList<BuildingFloor> = ArrayList(totalNumberOfFloors.coerceAtLeast(0))
         for (floorNumber in 0 until totalNumberOfFloors) {
             get(floorNumber)?.let { floor ->
                 buildingFloors.add(floor)

@@ -8,7 +8,7 @@ interface ServicedFloorService {
     fun getAll(elevatorNumber: Int): List<ServicedFloor>
 
     @Throws(RemoteException::class)
-    operator fun get(elevatorNumber: Int, floorNumber: Int): ServicedFloor?
+    fun get(elevatorNumber: Int, floorNumber: Int): ServicedFloor?
 
     @Throws(RemoteException::class)
     fun updateServicedFloor(servicedFloor: ServicedFloor)
