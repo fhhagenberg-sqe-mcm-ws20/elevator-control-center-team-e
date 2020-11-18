@@ -1,4 +1,4 @@
-package at.fhhagenberg.sqe.repository;
+package at.fhhagenberg.sqe.repository
 
 import at.fhhagenberg.sqe.api.ElevatorControlSystemService
 import at.fhhagenberg.sqe.api.ElevatorService
@@ -18,6 +18,7 @@ class ElevatorRepository @Inject constructor(
 ) {
     private var lastElevatorControlSystem = Resource.loading<ElevatorControlSystem>(null)
 
+    @Synchronized
     fun getElevatorControlSystem(): Resource<ElevatorControlSystem> {
         return try {
             val clockTick1 = elevatorControl.clockTick
@@ -32,27 +33,30 @@ class ElevatorRepository @Inject constructor(
         }
     }
 
-    fun updateCommittedDirection(elevator: Elevator?): Resource<Boolean> {
+    @Synchronized
+    fun updateCommittedDirection(elevator: Elevator): Resource<Boolean> {
         return try {
-            elevatorService.updateCommittedDirection(elevator!!)
+            elevatorService.updateCommittedDirection(elevator)
             Resource.success(true)
         } catch (exception: Exception) {
             Resource.error(exception)
         }
     }
 
-    fun updateServicedFloor(servicedFloor: ServicedFloor?): Resource<Boolean> {
+    @Synchronized
+    fun updateServicedFloor(servicedFloor: ServicedFloor): Resource<Boolean> {
         return try {
-            servicedFloorService.updateServicedFloor(servicedFloor!!)
+            servicedFloorService.updateServicedFloor(servicedFloor)
             Resource.success(true)
         } catch (exception: Exception) {
             Resource.error(exception)
         }
     }
 
-    fun updateTargetFloor(elevator: Elevator?): Resource<Boolean> {
+    @Synchronized
+    fun updateTargetFloor(elevator: Elevator): Resource<Boolean> {
         return try {
-            elevatorService.updateTargetFloor(elevator!!)
+            elevatorService.updateTargetFloor(elevator)
             Resource.success(true)
         } catch (exception: Exception) {
             Resource.error(exception)

@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.api
 
-import at.fhhagenberg.sqe.di.DI
+import at.fhhagenberg.sqe.di.TestDI
 import at.fhhagenberg.sqe.di.RealIElevator
 import com.google.inject.Key
 import org.junit.jupiter.api.BeforeEach
@@ -18,7 +18,7 @@ class ServicedFloorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = DI.createInjector()
+        val injector = TestDI.createInjector()
         service = injector.getInstance(ServicedFloorService::class.java)
         realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
     }

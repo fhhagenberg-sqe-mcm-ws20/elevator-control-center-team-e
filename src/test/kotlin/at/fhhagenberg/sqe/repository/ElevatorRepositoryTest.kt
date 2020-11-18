@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.repository
 
-import at.fhhagenberg.sqe.di.DI
+import at.fhhagenberg.sqe.di.TestDI
 import at.fhhagenberg.sqe.di.RealIElevator
 import at.fhhagenberg.sqe.entity.Direction
 import at.fhhagenberg.sqe.model.Status
@@ -19,7 +19,7 @@ class ElevatorRepositoryTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = DI.createInjector()
+        val injector = TestDI.createInjector()
         repository = injector.getInstance(ElevatorRepository::class.java)
         realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
     }

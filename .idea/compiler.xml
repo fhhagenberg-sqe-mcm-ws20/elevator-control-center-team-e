@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="elevator-control-group-e" target="11" />
+      <module name="elevator-control-group-e" target="13" />
     </bytecodeTargetLevel>
   </component>
 </project>

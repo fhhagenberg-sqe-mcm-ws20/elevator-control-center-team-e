@@ -1,11 +1,13 @@
 package at.fhhagenberg.sqe.di
 
 import com.google.inject.Guice
+import com.google.inject.Injector
 
-object DI {
+object TestDI {
     @JvmStatic
-    fun createInjector() =
+    fun createInjector(): Injector =
         Guice.createInjector(
+                InstantAppExecutorsModule(),
                 ElevatorServicesModule(),
                 MockRmiElevatorModule()
         )
