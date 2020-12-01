@@ -6,16 +6,18 @@ import at.fhhagenberg.sqe.entity.Elevator
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem
 import at.fhhagenberg.sqe.entity.ServicedFloor
 import at.fhhagenberg.sqe.model.Resource
+import at.fhhagenberg.sqe.model.Status
 import com.google.inject.Inject
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
 typealias UpdateListener = (Resource<ElevatorControlSystem>) -> Unit
+typealias ActionCompleteListener = (Resource<Boolean>) -> Unit
 
 class ElevatorStore @Inject constructor(
         private val appExecutors: AppExecutors,
         private val elevatorRepository: ElevatorRepository,
-        @PollingInterval private val pollingInterval: Long
+        @PollingInterval val pollingInterval: Long
 ) : Runnable {
 
     private val updateListeners = mutableListOf<WeakReference<UpdateListener>>()
@@ -30,21 +32,26 @@ class ElevatorStore @Inject constructor(
         updateListeners.removeAll { it.get() === listener }
     }
 
-    fun updateCommittedDirection(elevator: Elevator, listener: ((Resource<Boolean>) -> Unit)?) {
-        callUpdateFunction({
-            elevatorRepository.updateCommittedDirection(elevator)
-        }, listener)
-    }
-
-    fun updateServicedFloor(servicedFloor: ServicedFloor, listener: ((Resource<Boolean>) -> Unit)?) {
+    fun updateServicedFloor(servicedFloor: ServicedFloor, listener: ActionCompleteListener?) {
         callUpdateFunction({
             elevatorRepository.updateServicedFloor(servicedFloor)
         }, listener)
     }
 
-    fun updateTargetFloor(elevator: Elevator, listener: ((Resource<Boolean>) -> Unit)?) {
+    fun updateTargetFloor(elevator: Elevator, listener: ActionCompleteListener?) {
         callUpdateFunction({
-            elevatorRepository.updateTargetFloor(elevator)
+            // Update target floor
+            var result = elevatorRepository.updateTargetFloor(elevator)
+
+            // If applicable --> update committed direction
+            if (result.status == Status.SUCCESS) {
+                val newDirection = elevator.evaluateDirection(elevator.targetFloor)
+                if (newDirection != elevator.committedDirection) {
+                    elevator.committedDirection = newDirection
+                    result = elevatorRepository.updateTargetFloor(elevator)
+                }
+            }
+            result
         }, listener)
     }
 
@@ -71,7 +78,7 @@ class ElevatorStore @Inject constructor(
         }
     }
 
-    private fun poll() {
+    fun poll() {
         val elevatorControlSystemResource = elevatorRepository.getElevatorControlSystem()
         notifyUpdateListeners(elevatorControlSystemResource)
     }
@@ -86,9 +93,9 @@ class ElevatorStore @Inject constructor(
         updateListeners.removeIf { it.get() == null }
     }
 
-    private fun callUpdateFunction(functionCall: () -> Resource<Boolean>, listener: ((Resource<Boolean>) -> Unit)?) {
+    private fun callUpdateFunction(updateFunction: () -> Resource<Boolean>, listener: ((Resource<Boolean>) -> Unit)?) {
         appExecutors.networkIO.execute {
-            val result = functionCall.invoke()
+            val result = updateFunction()
             listener?.let { listener ->
                 appExecutors.mainThread.execute {
                     listener.invoke(result)

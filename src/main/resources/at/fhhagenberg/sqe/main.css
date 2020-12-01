@@ -1,3 +1,262 @@
+* {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+}
 .label {
     -fx-font-weight: bold;
+}
+
+
+
+/* MainView */
+.mainViewRootBorderPane {
+    -fx-background-color: '#181818';
+}
+.mainContainer-TopLabel {
+    -fx-font-weight: bold;
+    -fx-font-size: 24pt;
+}
+
+
+/*
+##########################################
+############### ElevatorView #############
+##########################################
+*/
+.elevatorViewRootBorderPane {
+    -fx-padding: 28 10 28 25;
+}
+.elevatorView-containerBorderPane {
+    -fx-padding: 28 10 28 25;
+}
+.elevatorViewScrollPane {
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+
+/* elevator live view box */
+.elevatorLiveViewBox {
+    -fx-background-color: '#A3A3A3';
+    -fx-background-radius: 8;
+    -fx-max-height: "infinity";
+    -fx-max-width: "infinity";
+    -fx-alignment: 'center';
+    -fx-padding: 0 10 4 20;
+}
+
+/* elevator progress view */
+.elevatorLiveViewBox-elevatorProgressViewContainer {
+    -fx-pref-height: infinity;
+    -fx-padding: 20 10;
+}
+.elevatorProgressView {
+    -fx-pref-height: 1000;
+    -fx-alignment: 'bottom-center';
+    -fx-border-width: 2;
+    -fx-border-color: '#000000';
+    -fx-border-radius: 10;
+}
+.elevatorProgressView-elevatorView {
+    -fx-min-height: 60;
+    -fx-min-width: 60;
+    -fx-background-color: '#000000';
+    -fx-background-radius: 9;
+    /*-fx-translate-y: -200;*/
+}
+
+/* elevator live view floor box */
+.elevatorLiveViewFloorBox {
+    -fx-pref-height: 1000;
+}
+.elevatorLiveViewBox-floorBoxContainer {
+    -fx-padding: 20 10;
+}
+.elevatorLiveViewFloorBox-floorNumberLabel {
+    -fx-font-size: 48;
+    -fx-font-weight: bolder;
+}
+
+
+/* metrics box */
+.elevatorMetricsBox {
+    -fx-background-color: 'transparent';
+    -fx-max-height: "infinity";
+    -fx-max-width: "infinity";
+    -fx-alignment: 'center';
+    -fx-padding: 0 20 0 20;
+    -fx-spacing: 20;
+}
+.elevatorMetricsBox-horizontalContainer {
+    -fx-spacing: 20;
+    -fx-max-height: "infinity";
+    -fx-max-width: "infinity";
+}
+.elevatorMetricsBox-columnCardContainer {
+    -fx-max-height: "infinity";
+    -fx-max-width: "infinity";
+    -fx-alignment: 'center';
+    -fx-spacing: 20;
+}
+.elevatorMetricsCard {
+    -fx-background-color: '#616161';
+    -fx-background-radius: 15;
+    -fx-pref-height: 200;
+    -fx-pref-width: 200;
+    -fx-max-height: "infinity";
+    -fx-max-width: "infinity";
+    -fx-alignment: 'center';
+    -fx-padding: 5;
+}
+.elevatorMetricsCard-valueLabel {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+    -fx-text-fill: '#ffffff';
+}
+.elevatorMetricsCard-unitLabel {
+    -fx-font-size: 12;
+    -fx-text-fill: '#ffffff';
+}
+.elevatorMetricsCard-nameLabel {
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-text-fill: '#ffffff';
+}
+
+
+/* floorButtonIndicators: */
+.floorButtonIndicatorBox {
+    -fx-background-color: '#7B7B7B';
+    -fx-pref-height: infinity;
+    -fx-max-width: 160;
+    -fx-background-radius: 8;
+    -fx-padding: 0 10 4 10;
+}
+
+.floorButtonIndicatorBox-buttonBox {
+    -fx-padding: 20 4;
+    -fx-pref-height: infinity;
+    -fx-max-width: infinity;
+    -fx-alignment: 'center';
+    -fx-spacing: 20;
+}
+
+.floorButtonIndicator {
+    -fx-pref-height: 40;
+    -fx-pref-width: 40;
+    -fx-padding: 2 10 2 10;
+}
+.floorButtonIndicator-centerLabel {
+    -fx-alignment: 'center';
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+
+
+
+
+
+
+
+
+/* top bar */
+.topBar {
+    -fx-background-color: '#262626';
+    -fx-alignment: 'center-right';
+    -fx-spacing: 15;
+    -fx-padding: 5 15 5 15
+}
+
+.topBar-refresh-button {
+    -fx-background-color: '#703EFF';
+    -fx-padding: 6 15 6 15;
+    -fx-text-fill: '#ffffff';
+    -fx-font-size: 18;
+    -fx-font-weight: 600;
+    -fx-background-radius: 20;
+}
+
+.topBar-refresh-button:hover {
+    -fx-background-color: '#875CFF';
+}
+
+.topBar-auto-button {
+    -fx-background-color: '#969696';
+    -fx-padding: 6 15 6 15;
+    -fx-text-fill: '#ffffff';
+    -fx-font-size: 18;
+    -fx-font-weight: 600;
+    -fx-background-radius: 20;
+}
+
+.topBar-auto-toggle {
+    -fx-text-fill: '#ffffff';
+    -fx-font-size: 18;
+    -fx-font-weight: 600;
+}
+
+.topBar-auto-button:selected {
+    -fx-background-color: '#703EFF';
+}
+
+
+/* sidebar */
+.sidebar {
+    -fx-background-color: '#262626';
+}
+.sidebar-listbox {
+    -fx-background-color: '#262626';
+    /*-fx-spacing: 15;*/ /* sets margin between child elements */
+}
+.sidebar ToggleButton {
+    -fx-max-width: "infinity";
+    -fx-background-color: 'transparent';
+    -fx-font-size: 18;
+    -fx-font-weight: 400;
+    -fx-text-fill: '#ffffff';
+    -fx-padding: 10 10 10 10;
+}
+.sidebar ToggleButton:hover {
+    -fx-background-color: '#383838';
+}
+.sidebar ToggleButton:selected {
+    -fx-background-color: '#444444';
+    -fx-font-weight: 600;
+}
+
+
+
+/*
+##########################################
+############### OverviewView #############
+##########################################
+*/
+.overviewViewRootBorderPane {
+    -fx-padding: 25;
+}
+.overviewViewBackgroundBorderPane {
+    -fx-background-color: '#A3A3A3';
+    -fx-background-radius: 20;
+    -fx-padding: 25 0;
+}
+.overviewViewScrollPane {
+    -fx-background: '#A3A3A3';
+    -fx-border-color: '#A3A3A3';
+    -fx-background-color: transparent;
+}
+
+/* overview elevator view */
+.overviewElevatorView {
+    -fx-padding: 0 15;
+    -fx-border-color: '#787878';
+    -fx-border-width: 0 2 0 0;
+    -fx-border-style: segments(10, 10, 10, 10)  line-cap round ;
+}
+.overviewElevatorView-noBorder {
+    -fx-padding: 0 15;
+    -fx-border-width: 0 0 0 0;
+}
+.overviewFloorNumberView {
+    -fx-padding: 0 15;
 }

@@ -16,6 +16,13 @@ data class Elevator(
 ) {
     fun getButton(floorNumber: Int): FloorButton? = buttons.firstOrNull { it.floorNumber == floorNumber }
     fun getServicedFloor(floorNumber: Int): ServicedFloor? = servicedFloors.firstOrNull { it.floorNumber == floorNumber }
+    fun evaluateDirection(targetFloor: Int): Direction {
+        return when {
+            targetFloor > currentFloor -> Direction.UP
+            targetFloor < currentFloor -> Direction.DOWN
+            else -> Direction.UNCOMMITTED
+        }
+    }
 
     class Builder {
         private var elevatorNumber = 0

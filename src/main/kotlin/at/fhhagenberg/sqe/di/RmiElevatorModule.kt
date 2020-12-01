@@ -7,15 +7,26 @@ import com.google.inject.Key
 import com.google.inject.Provider
 import com.google.inject.Singleton
 import sqelevator.IElevator
+import kotlin.math.sin
 
 class RmiElevatorModule : AbstractModule() {
+
+    private var currentCount = 0
+    private val period = 1000.0
+    private val f = 1.0
+
     override fun configure() {
         // TODO: Bind IElevator to RMI IElevator implementation
         // bind(Key.get(IElevator::class.java, RealIElevator::class.java)).to(SOMETHING).`in`(Singleton::class.java)
         bind(Key.get(IElevator::class.java, RealIElevator::class.java)).toInstance(
                 object : IElevator {
                     override fun getCommittedDirection(elevatorNumber: Int): Int {
-                        return Direction.UNCOMMITTED.direction
+                        return when(elevatorNumber) {
+                            0 -> Direction.UP.direction
+                            1 -> Direction.DOWN.direction
+                            2 -> Direction.UNCOMMITTED.direction
+                            else -> Direction.UNKNOWN.direction
+                        }
                     }
 
                     override fun getElevatorAccel(elevatorNumber: Int): Int {
@@ -23,7 +34,7 @@ class RmiElevatorModule : AbstractModule() {
                     }
 
                     override fun getElevatorButton(elevatorNumber: Int, floor: Int): Boolean {
-                        return false
+                        return floor == 2
                     }
 
                     override fun getElevatorDoorStatus(elevatorNumber: Int): Int {
@@ -39,7 +50,10 @@ class RmiElevatorModule : AbstractModule() {
                     }
 
                     override fun getElevatorPosition(elevatorNumber: Int): Int {
-                        return 20
+                        val w = 2 * Math.PI / period * f
+                        val value = floorHeight * ((sin(w * currentCount) + 1.0) / 2.0)
+                        currentCount++
+                        return value.toInt()
                     }
 
                     override fun getElevatorSpeed(elevatorNumber: Int): Int {
@@ -55,7 +69,7 @@ class RmiElevatorModule : AbstractModule() {
                     }
 
                     override fun getFloorButtonDown(floor: Int): Boolean {
-                        return false
+                        return floor == 1
                     }
 
                     override fun getFloorButtonUp(floor: Int): Boolean {
@@ -71,7 +85,7 @@ class RmiElevatorModule : AbstractModule() {
                     }
 
                     override fun getServicesFloors(elevatorNumber: Int, floor: Int): Boolean {
-                        return true
+                        return floor != 2
                     }
 
                     override fun getTarget(elevatorNumber: Int): Int {

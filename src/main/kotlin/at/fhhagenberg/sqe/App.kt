@@ -8,6 +8,7 @@ import at.fhhagenberg.sqe.util.ViewLoader
 import com.google.inject.Key
 import javafx.application.Application
 import javafx.scene.Scene
+import javafx.scene.image.Image
 import javafx.stage.Stage
 import java.util.*
 
@@ -27,11 +28,16 @@ class App : Application() {
             isDaemon = true
         }.start()
 
+        // define stage min size
+        stage.minHeight = 600.0
+        stage.minWidth = 500.0
+
         // Load main view
         val mainFxmlView = viewLoader.loadView(MainView::class.java)
 
         // Set main view
-        val scene = Scene(mainFxmlView.root)
+        val scene = Scene(mainFxmlView.view)
+        stage.icons.add(Image("/icons/elevator.png"))
         stage.scene = scene
         scene.stylesheets.add(javaClass.getResource("main.css").toExternalForm())
 

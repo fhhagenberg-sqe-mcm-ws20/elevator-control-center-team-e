@@ -3,6 +3,7 @@ package at.fhhagenberg.sqe.repository
 import at.fhhagenberg.sqe.di.TestDI
 import at.fhhagenberg.sqe.di.RealIElevator
 import at.fhhagenberg.sqe.entity.Direction
+import at.fhhagenberg.sqe.model.ErrorCode
 import at.fhhagenberg.sqe.model.Status
 import com.google.inject.Key
 import org.junit.jupiter.api.BeforeEach
@@ -40,7 +41,8 @@ class ElevatorRepositoryTest {
 
         assertEquals(Status.ERROR, elevatorControlSystem.status)
         assertNotNull(elevatorControlSystem.error)
-        assertEquals(RemoteException::class.java, elevatorControlSystem.error!!.javaClass)
+        assertTrue(elevatorControlSystem.error!!.exception is RemoteException)
+        assertEquals(ErrorCode.CONNECTION_ERROR, elevatorControlSystem.error!!.errorCode)
         assertNull(elevatorControlSystem.data)
     }
 
@@ -99,7 +101,8 @@ class ElevatorRepositoryTest {
 
         assertEquals(Status.ERROR, booleanResource.status)
         assertNotNull(booleanResource.error)
-        assertEquals(RemoteException::class.java, booleanResource.error!!.javaClass)
+        assertTrue(booleanResource.error!!.exception is RemoteException)
+        assertEquals(ErrorCode.CONNECTION_ERROR, booleanResource.error!!.errorCode)
         assertNull(booleanResource.data)
         Mockito.verify(realIElevator).setCommittedDirection(0, Direction.DOWN.direction)
     }
@@ -127,7 +130,8 @@ class ElevatorRepositoryTest {
 
         assertEquals(Status.ERROR, booleanResource.status)
         assertNotNull(booleanResource.error)
-        assertEquals(RemoteException::class.java, booleanResource.error!!.javaClass)
+        assertTrue(booleanResource.error!!.exception is RemoteException)
+        assertEquals(ErrorCode.CONNECTION_ERROR, booleanResource.error!!.errorCode)
         assertNull(booleanResource.data)
         Mockito.verify(realIElevator).setServicesFloors(0, 0, false)
     }
@@ -155,7 +159,8 @@ class ElevatorRepositoryTest {
 
         assertEquals(Status.ERROR, booleanResource.status)
         assertNotNull(booleanResource.error)
-        assertEquals(RemoteException::class.java, booleanResource.error!!.javaClass)
+        assertTrue(booleanResource.error!!.exception is RemoteException)
+        assertEquals(ErrorCode.CONNECTION_ERROR, booleanResource.error!!.errorCode)
         assertNull(booleanResource.data)
         Mockito.verify(realIElevator).setTarget(0, 0)
     }

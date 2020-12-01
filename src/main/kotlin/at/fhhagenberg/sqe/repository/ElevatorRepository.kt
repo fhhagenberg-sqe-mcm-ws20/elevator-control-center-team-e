@@ -6,6 +6,8 @@ import at.fhhagenberg.sqe.api.ServicedFloorService
 import at.fhhagenberg.sqe.entity.Elevator
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem
 import at.fhhagenberg.sqe.entity.ServicedFloor
+import at.fhhagenberg.sqe.model.Error
+import at.fhhagenberg.sqe.model.ErrorCode
 import at.fhhagenberg.sqe.model.Resource
 import com.google.inject.Inject
 import sqelevator.IElevator
@@ -29,7 +31,7 @@ class ElevatorRepository @Inject constructor(
             }
             lastElevatorControlSystem
         } catch (exception: Exception) {
-            Resource.error(exception)
+            Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }
 
@@ -39,7 +41,7 @@ class ElevatorRepository @Inject constructor(
             elevatorService.updateCommittedDirection(elevator)
             Resource.success(true)
         } catch (exception: Exception) {
-            Resource.error(exception)
+            Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }
 
@@ -49,7 +51,7 @@ class ElevatorRepository @Inject constructor(
             servicedFloorService.updateServicedFloor(servicedFloor)
             Resource.success(true)
         } catch (exception: Exception) {
-            Resource.error(exception)
+            Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }
 
@@ -59,7 +61,7 @@ class ElevatorRepository @Inject constructor(
             elevatorService.updateTargetFloor(elevator)
             Resource.success(true)
         } catch (exception: Exception) {
-            Resource.error(exception)
+            Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }
 }

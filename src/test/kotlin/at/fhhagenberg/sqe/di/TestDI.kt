@@ -9,6 +9,9 @@ object TestDI {
         Guice.createInjector(
                 InstantAppExecutorsModule(),
                 ElevatorServicesModule(),
-                MockRmiElevatorModule()
+                MockRmiElevatorModule(),
+                ElevatorRepositoryModule(),
+                ViewModelsModule(),
+                JavaFxModule()
         )
 }

@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="at.fhhagenberg.sqe.ui.overview.OverviewView"
-            prefHeight="400.0" prefWidth="600.0">
-
-    <VBox>
-        <Label fx:id="labelHello"/>
-    </VBox>
-
-</AnchorPane>
+            fx:id="overviewViewRootBorderPane"
+            styleClass="overviewViewRootBorderPane">
+</BorderPane>
