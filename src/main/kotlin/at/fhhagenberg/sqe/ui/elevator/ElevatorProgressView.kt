@@ -13,7 +13,7 @@ class ElevatorProgressView(
 ) : VBox() {
 
     private val currentPositionProperty = viewModel.currentPositionProperty
-    private val floorHeightProperty = viewModel.floorHeightProperty
+    private val buildingHeightProperty = viewModel.buildingHeightProperty
     private val committedDirectionProperty = viewModel.committedDirectionProperty
 
     private val images = mapOf(
@@ -43,11 +43,15 @@ class ElevatorProgressView(
 
         this.children.add(elevatorView)
 
-        val doubleFloorHeightProperty = SimpleDoubleProperty()
-        doubleFloorHeightProperty.bind(Bindings.createDoubleBinding({ floorHeightProperty.doubleValue().coerceAtLeast(1.0) }, floorHeightProperty))
+        val doubleBuildingHeightProperty = SimpleDoubleProperty()
+        doubleBuildingHeightProperty.bind(Bindings.createDoubleBinding({ buildingHeightProperty.doubleValue().coerceAtLeast(1.0) }, buildingHeightProperty))
 
         elevatorView.translateYProperty().bind(
-                currentPositionProperty.divide(doubleFloorHeightProperty).multiply(this.heightProperty().subtract(elevatorView.heightProperty())).multiply(-1.0)
+                currentPositionProperty
+                        .divide(doubleBuildingHeightProperty)
+                        .multiply(this.heightProperty().subtract(elevatorView.heightProperty().multiply(1.5f)))
+                        .multiply(-1.0)
+                        .subtract(elevatorView.heightProperty().multiply(0.25f))
         )
     }
 

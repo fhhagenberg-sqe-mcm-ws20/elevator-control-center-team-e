@@ -1,23 +1,25 @@
 package at.fhhagenberg.sqe.ui.main
 
-import at.fhhagenberg.sqe.di.AutoModeProperty
-import at.fhhagenberg.sqe.entity.Elevator
+import at.fhhagenberg.sqe.di.key.AutoModeProperty
+import at.fhhagenberg.sqe.entity.ElevatorControlSystem
 import at.fhhagenberg.sqe.model.Error
-import at.fhhagenberg.sqe.model.Status
-import at.fhhagenberg.sqe.repository.ElevatorStore
-import at.fhhagenberg.sqe.repository.UpdateListener
-import at.fhhagenberg.sqe.viewmodel.BaseViewModel
+import at.fhhagenberg.sqe.model.Resource
+import at.fhhagenberg.sqe.repository.ElevatorControlSystemRepository
 import com.google.inject.Inject
+import javafx.beans.binding.Bindings
 import javafx.beans.property.BooleanProperty
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
+import sqelevator.ConnectableIElevator
 
 class MainViewModelImpl @Inject constructor(
-        elevatorStore: ElevatorStore,
-        @AutoModeProperty override val autoModeProperty: BooleanProperty
-) : BaseViewModel(elevatorStore), MainViewModel {
+        @AutoModeProperty override val autoModeProperty: BooleanProperty,
+        elevatorControlSystemRepository: ElevatorControlSystemRepository,
+        private val elevatorControl: ConnectableIElevator
+) : MainViewModel {
+    override val errorProperty = SimpleObjectProperty<Error>()
     override val selectedElevatorNumberProperty = SimpleIntegerProperty(-1)
     override var selectedElevatorNumber: Int
         get() = selectedElevatorNumberProperty.get()
@@ -27,39 +29,37 @@ class MainViewModelImpl @Inject constructor(
         get() = autoModeProperty.get()
         set(value) { autoModeProperty.set(value) }
 
-    override val elevators = FXCollections.observableArrayList<Elevator>()
+    override val elevatorNumbers = FXCollections.observableArrayList<Int>()
 
-    override val elevatorNames = FXCollections.observableArrayList<String>()
+    private val elevatorControlSystem = elevatorControlSystemRepository.getElevatorControlSystem()
+    private val elevatorChangeListener: ChangeListener<Resource<ElevatorControlSystem>> = ChangeListener<Resource<ElevatorControlSystem>> { _, _, newValue ->
+        applyElevatorNumbers(newValue)
+    }
 
-    override val loadingProperty = SimpleBooleanProperty(true)
+    init {
+        applyElevatorNumbers(elevatorControlSystem.get())
+        elevatorControlSystem.addListener(elevatorChangeListener)
 
-    override val errorProperty = SimpleObjectProperty<Error>()
+        val errorBinding = Bindings.createObjectBinding({
+            elevatorControlSystem.get()?.error
+        }, elevatorControlSystem)
+        errorProperty.bind(errorBinding)
+    }
 
-    override fun createUpdateListener(): UpdateListener = { elevatorControlSystemResource ->
+    override fun refresh() {
+        elevatorControl.connect()
+    }
 
-        // Set elevators property
-        val elevators = elevatorControlSystemResource.data?.elevators
-        if (elevators != null && this.elevators != elevators) {
-            this.elevators.setAll(elevators)
-        }
+    override fun destroy() {
+        elevatorControlSystem.removeListener(elevatorChangeListener)
+    }
 
-        // Set elevator names property
-        val elevatorNames = elevators?.map { "elevator ${it.elevatorNumber + 1}" }
-        if (elevatorNames != null && this.elevatorNames != elevatorNames) {
-            this.elevatorNames.setAll(elevatorNames)
-        }
-
-
-        // Set loading property
-        val isLoading = elevatorControlSystemResource.status == Status.LOADING || elevators == null
-        if (loadingProperty.get() != isLoading) {
-            loadingProperty.set(isLoading)
-        }
-
-        // Set error property
-        val error = if (elevatorControlSystemResource.status == Status.ERROR) elevatorControlSystemResource.error else null
-        if (errorProperty.get() != error) {
-            errorProperty.set(error)
+    private fun applyElevatorNumbers(elevatorControlSystemResource: Resource<ElevatorControlSystem>?) {
+        elevatorControlSystemResource?.data?.let { elevatorControlSystem ->
+            val elevatorNumbers = elevatorControlSystem.elevators.map { it.elevatorNumber }
+            if (this.elevatorNumbers != elevatorNumbers) {
+                this.elevatorNumbers.setAll(elevatorNumbers)
+            }
         }
     }
 }

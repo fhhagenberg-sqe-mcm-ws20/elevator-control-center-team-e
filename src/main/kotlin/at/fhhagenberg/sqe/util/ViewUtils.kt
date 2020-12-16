@@ -10,6 +10,9 @@ object ViewUtils {
             (this.properties["scaleIn"] as? ScaleTransition)?.stop()
             (this.properties["scaleOut"] as? ScaleTransition)?.stop()
             (this.properties["scalePress"] as? ScaleTransition)?.stop()
+            this.properties["scaleIn"] = null
+            this.properties["scaleOut"] = null
+            this.properties["scalePress"] = null
             this.setOnMousePressed { }
             this.setOnMouseReleased { }
             this.setOnMouseEntered { }

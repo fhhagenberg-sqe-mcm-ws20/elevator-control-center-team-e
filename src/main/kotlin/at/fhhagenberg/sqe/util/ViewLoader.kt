@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.util
 
-import at.fhhagenberg.sqe.di.StringsFile
+import at.fhhagenberg.sqe.di.key.StringsFile
 import at.fhhagenberg.sqe.ui.common.ViewController
 import at.fhhagenberg.sqe.ui.common.FxmlUI
 import com.google.inject.Inject
@@ -10,7 +10,7 @@ import javafx.scene.Parent
 import java.util.*
 
 class ViewLoader @Inject constructor(
-        @StringsFile private val stringsBundle: ResourceBundle,
+        @StringsFile private val resources: ResourceBundle,
         private val injector: Injector
 ) {
     fun <T : ViewController> loadView(viewClass: Class<T>): FxmlUI<T> {
@@ -18,7 +18,7 @@ class ViewLoader @Inject constructor(
         fxmlLoader.setControllerFactory {
             injector.getInstance(it)
         }
-        fxmlLoader.resources = stringsBundle
+        fxmlLoader.resources = resources
         val root = fxmlLoader.load<Parent>(viewClass.getResource("${viewClass.simpleName}.fxml").openStream())
         return FxmlUI(fxmlLoader.getController(), root)
     }

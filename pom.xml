@@ -6,7 +6,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.version>1.4.20</kotlin.version>
         <dokka.version>0.10.0</dokka.version>
         <javafx.version>13</javafx.version>
         <junit.version>5.5.2</junit.version>
@@ -205,6 +205,15 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>at/fhhagenberg/sqe/di/**/*</exclude>
+                        <exclude>at/fhhagenberg/sqe/task/*Polling*</exclude>
+                        <exclude>at/fhhagenberg/sqe/util/JavaFxAppExecutors*</exclude>
+                        <exclude>at/fhhagenberg/sqe/util/ViewUtils*</exclude>
+                        <exclude>**/RmiIElevator*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>

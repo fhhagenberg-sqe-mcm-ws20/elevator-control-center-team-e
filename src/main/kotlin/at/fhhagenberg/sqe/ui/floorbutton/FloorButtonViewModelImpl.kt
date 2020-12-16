@@ -1,49 +1,42 @@
 package at.fhhagenberg.sqe.ui.floorbutton
 
-import at.fhhagenberg.sqe.repository.ElevatorStore
-import at.fhhagenberg.sqe.repository.UpdateListener
-import at.fhhagenberg.sqe.viewmodel.BaseViewModel
+import at.fhhagenberg.sqe.entity.FloorButton
+import at.fhhagenberg.sqe.model.Resource
+import at.fhhagenberg.sqe.repository.FloorButtonRepository
 import com.google.inject.Inject
+import javafx.beans.binding.Bindings
 import javafx.beans.property.*
 import javafx.scene.paint.Color
 
 class FloorButtonViewModelImpl @Inject constructor(
-        elevatorStore: ElevatorStore
-) : BaseViewModel(elevatorStore), FloorButtonViewModel {
+        private val floorButtonRepository: FloorButtonRepository
+) : FloorButtonViewModel {
 
-    override val floorNumberProperty = SimpleStringProperty("")
+    override val floorNumberProperty = SimpleIntegerProperty(-1)
     override val activeProperty = SimpleBooleanProperty(false)
-    override val backgroundColorProperty = SimpleObjectProperty(Color.valueOf(defaultColor))
 
-    private var _floorNumber = -1
-    override var floorNumber
-        get() = _floorNumber
-        set(value) {
-            _floorNumber = value
-            floorNumberProperty.set(value.toString())
-        }
+    private var _elevatorNumber = -1
+    override val elevatorNumber get() = _elevatorNumber
 
-    override var elevatorNumber = -1
+    override val floorNumber get() = floorNumberProperty.get()
 
-    override fun createUpdateListener(): UpdateListener = { elevatorControlSystemResource ->
-        val elevator = elevatorControlSystemResource.data?.getElevator(elevatorNumber)
-        val floorButton = elevator?.getButton(floorNumber)
+    private var floorButton: ReadOnlyObjectProperty<Resource<FloorButton>>? = null
 
-        if (floorNumber != -1 && elevatorNumber != -1) {
+    override fun loadData(elevatorNumber: Int, floorNumber: Int) {
+        destroy()
 
-            val isActive = floorButton?.isActive
-            if (isActive != null && isActive != activeProperty.get()) {
-                activeProperty.set(isActive)
-            }
+        _elevatorNumber = elevatorNumber
+        floorNumberProperty.set(floorNumber)
 
-            val color = Color.valueOf(if (isActive == true) "#ADFF00" else defaultColor)
-            if (color != backgroundColorProperty.get()) {
-                backgroundColorProperty.set(color)
-            }
-        }
+        val floorButton = floorButtonRepository.getFloorButton(elevatorNumber, floorNumber)
+        val activeBinding = Bindings.createBooleanBinding({
+            floorButton.get()?.data?.isActive ?: false
+        }, floorButton)
+        activeProperty.bind(activeBinding)
+        this.floorButton = floorButton
     }
 
-    companion object {
-        private const val defaultColor = "#C4C4C4"
+    override fun destroy() {
+        activeProperty.unbind()
     }
 }

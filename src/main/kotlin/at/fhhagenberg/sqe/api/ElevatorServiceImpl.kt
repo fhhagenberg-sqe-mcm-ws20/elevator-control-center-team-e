@@ -1,15 +1,15 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.entity.Direction
 import at.fhhagenberg.sqe.entity.DoorState
 import at.fhhagenberg.sqe.entity.Elevator
 import com.google.inject.Inject
-import sqelevator.IElevator
+import sqelevator.ConnectableIElevator
 import java.rmi.RemoteException
 import java.util.*
 
 class ElevatorServiceImpl @Inject constructor(
-        private val elevatorControl: IElevator,
+        private val elevatorControl: ConnectableIElevator,
         private val servicedFloorService: ServicedFloorService,
         private val floorButtonService: FloorButtonService
 ) : ElevatorService {
@@ -46,12 +46,9 @@ class ElevatorServiceImpl @Inject constructor(
     }
 
     @Throws(RemoteException::class)
-    override fun updateCommittedDirection(elevator: Elevator) {
-        elevatorControl.setCommittedDirection(elevator.elevatorNumber, elevator.committedDirection.direction)
-    }
-
-    @Throws(RemoteException::class)
-    override fun updateTargetFloor(elevator: Elevator) {
-        elevatorControl.setTarget(elevator.elevatorNumber, elevator.targetFloor)
+    override fun updateTargetFloor(elevator: Elevator, targetFloor: Int) {
+        val direction = elevator.evaluateDirection(targetFloor).direction
+        elevatorControl.setTarget(elevator.elevatorNumber, targetFloor)
+        elevatorControl.setCommittedDirection(elevator.elevatorNumber, direction)
     }
 }

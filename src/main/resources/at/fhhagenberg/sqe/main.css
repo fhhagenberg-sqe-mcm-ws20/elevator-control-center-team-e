@@ -75,6 +75,7 @@
 .elevatorLiveViewFloorBox-floorNumberLabel {
     -fx-font-size: 48;
     -fx-font-weight: bolder;
+    -fx-text-fill: "#E9E9E9"
 }
 
 

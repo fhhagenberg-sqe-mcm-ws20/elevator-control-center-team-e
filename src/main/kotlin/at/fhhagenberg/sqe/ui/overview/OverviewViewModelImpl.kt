@@ -1,41 +1,38 @@
 package at.fhhagenberg.sqe.ui.overview
 
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem
-import at.fhhagenberg.sqe.repository.ElevatorStore
-import at.fhhagenberg.sqe.repository.UpdateListener
-import at.fhhagenberg.sqe.ui.elevator.ElevatorViewModel
-import at.fhhagenberg.sqe.viewmodel.BaseViewModel
+import at.fhhagenberg.sqe.model.Resource
+import at.fhhagenberg.sqe.repository.ElevatorControlSystemRepository
 import com.google.inject.Inject
-import com.google.inject.Injector
-import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 
 class OverviewViewModelImpl @Inject constructor(
-        elevatorStore: ElevatorStore,
-        private val injector: Injector
-) : BaseViewModel(elevatorStore), OverviewViewModel {
-
-    override val elevatorControlSystemProperty = SimpleObjectProperty<ElevatorControlSystem>()
+        elevatorControlSystemRepository: ElevatorControlSystemRepository
+) : OverviewViewModel {
 
     override val elevatorNumbers = FXCollections.observableArrayList<Int>()
 
-    override fun createUpdateListener(): UpdateListener = { elevatorControlSystemResource ->
-        val elevatorControlSystem = elevatorControlSystemResource.data
-        val elevatorNumbers = elevatorControlSystem?.elevators?.map { it.elevatorNumber }
-
-        if (elevatorControlSystem != null && elevatorControlSystemProperty.get() != elevatorControlSystem) {
-            elevatorControlSystemProperty.set(elevatorControlSystem)
-        }
-
-        if (elevatorNumbers != null && this.elevatorNumbers != elevatorNumbers) {
-            this.elevatorNumbers.setAll(elevatorNumbers)
-        }
+    private val elevatorControlSystem = elevatorControlSystemRepository.getElevatorControlSystem()
+    private val elevatorControlSystemChangeListener: ChangeListener<Resource<ElevatorControlSystem>> = ChangeListener<Resource<ElevatorControlSystem>> { _, _, newValue ->
+        applyElevatorNumbers(newValue)
     }
 
-    override fun getElevatorViewModel(elevatorNumber: Int): ElevatorViewModel {
-        val vm = injector.getInstance(ElevatorViewModel::class.java)
-        vm.elevatorNumber = elevatorNumber
-        return vm
+    init {
+        applyElevatorNumbers(elevatorControlSystem.get())
+        elevatorControlSystem.addListener(elevatorControlSystemChangeListener)
+    }
+
+    override fun destroy() {
+        elevatorControlSystem.removeListener(elevatorControlSystemChangeListener)
+    }
+
+    private fun applyElevatorNumbers(elevatorControlSystemResource: Resource<ElevatorControlSystem>?) {
+        elevatorControlSystemResource?.data?.let { elevatorControlSystem ->
+            val elevatorNumbers = elevatorControlSystem.elevators.map { it.elevatorNumber }
+            if (this.elevatorNumbers != elevatorNumbers) {
+                this.elevatorNumbers.setAll(elevatorNumbers)
+            }
+        }
     }
 }

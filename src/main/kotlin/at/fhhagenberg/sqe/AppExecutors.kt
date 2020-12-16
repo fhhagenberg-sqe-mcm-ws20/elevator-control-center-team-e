@@ -2,7 +2,9 @@ package at.fhhagenberg.sqe
 
 import java.util.concurrent.Executor
 
-open class AppExecutors(
+abstract class AppExecutors(
         val networkIO: Executor,
         val mainThread: Executor
-)
+) {
+    abstract fun shutdown()
+}

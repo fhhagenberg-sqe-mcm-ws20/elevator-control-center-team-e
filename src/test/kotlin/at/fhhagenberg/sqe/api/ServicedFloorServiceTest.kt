@@ -1,12 +1,11 @@
 package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.di.TestDI
-import at.fhhagenberg.sqe.di.RealIElevator
-import com.google.inject.Key
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
+import sqelevator.ConnectableIElevator
 import sqelevator.IElevator
 import java.rmi.RemoteException
 import kotlin.test.*
@@ -18,9 +17,9 @@ class ServicedFloorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = TestDI.createInjector()
+        val injector = TestDI.createMockInjector()
         service = injector.getInstance(ServicedFloorService::class.java)
-        realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
+        realIElevator = injector.getInstance(ConnectableIElevator::class.java)
     }
 
     @Test
@@ -29,6 +28,22 @@ class ServicedFloorServiceTest {
         val servicedFloors = service.getAll(0)
 
         assertEquals(2, servicedFloors.size)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testGetAllNegativeElevators() {
+        Mockito.`when`(realIElevator.elevatorNum).thenReturn(-1)
+
+        assertEquals(0, service.getAll(0).size)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testGetAllNegativeFloors() {
+        Mockito.`when`(realIElevator.floorNum).thenReturn(-1)
+
+        assertEquals(0, service.getAll(0).size)
     }
 
     @Test
@@ -68,8 +83,7 @@ class ServicedFloorServiceTest {
     @Throws(RemoteException::class)
     fun testUpdateServicedFloor() {
         val servicedFloor = service.get(0, 0)!!
-        servicedFloor.isServiced = false
-        service.updateServicedFloor(servicedFloor)
+        service.updateServicedFloor(servicedFloor, false)
 
         Mockito.verify(realIElevator).setServicesFloors(0, 0, false)
     }
@@ -79,11 +93,9 @@ class ServicedFloorServiceTest {
     fun testUpdateServicedFloorError() {
         Mockito.`when`(realIElevator.setServicesFloors(0, 0, false)).thenThrow(RemoteException())
         val servicedFloor = service.get(0, 0)!!
-        servicedFloor.isServiced = false
 
         assertThrows<RemoteException> {
-            service.updateServicedFloor(servicedFloor)
+            service.updateServicedFloor(servicedFloor, false)
         }
-        Mockito.verify(realIElevator).setServicesFloors(0, 0, false)
     }
 }

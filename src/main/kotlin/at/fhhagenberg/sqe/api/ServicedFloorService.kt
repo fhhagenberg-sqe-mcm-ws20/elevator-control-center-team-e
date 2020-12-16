@@ -1,4 +1,4 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.entity.ServicedFloor
 import java.rmi.RemoteException
@@ -11,5 +11,5 @@ interface ServicedFloorService {
     fun get(elevatorNumber: Int, floorNumber: Int): ServicedFloor?
 
     @Throws(RemoteException::class)
-    fun updateServicedFloor(servicedFloor: ServicedFloor)
+    fun updateServicedFloor(servicedFloor: ServicedFloor, isServiced: Boolean)
 }

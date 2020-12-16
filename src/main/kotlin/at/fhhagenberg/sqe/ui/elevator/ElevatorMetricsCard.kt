@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.ui.elevator
 
-import javafx.beans.property.StringProperty
+import javafx.beans.value.ObservableObjectValue
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane
@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox
 
 class ElevatorMetricsCard constructor(
         private val name: String,
-        private val valueProperty: StringProperty,
+        private val valueProperty: ObservableObjectValue<String>,
         private val unit: String
 ) : BorderPane() {
 

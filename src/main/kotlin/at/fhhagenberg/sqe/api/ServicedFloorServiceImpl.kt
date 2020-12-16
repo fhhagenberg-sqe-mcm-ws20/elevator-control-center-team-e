@@ -1,13 +1,13 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.entity.ServicedFloor
 import com.google.inject.Inject
-import sqelevator.IElevator
+import sqelevator.ConnectableIElevator
 import java.rmi.RemoteException
 import java.util.*
 
 class ServicedFloorServiceImpl @Inject constructor(
-        private val elevatorControl: IElevator
+        private val elevatorControl: ConnectableIElevator
 ) : ServicedFloorService {
     @Throws(RemoteException::class)
     override fun getAll(elevatorNumber: Int): List<ServicedFloor> {
@@ -16,9 +16,7 @@ class ServicedFloorServiceImpl @Inject constructor(
         val servicedFloors: MutableList<ServicedFloor> = ArrayList(totalNumberOfFloors.coerceAtLeast(0))
         if (elevatorNumber in 0 until totalNumberOfElevators) {
             for (floorNumber in 0 until totalNumberOfFloors) {
-                get(elevatorNumber, floorNumber)?.let { servicedFloor ->
-                    servicedFloors.add(servicedFloor)
-                }
+                servicedFloors.add(get(elevatorNumber, floorNumber)!!)
             }
         }
         return servicedFloors
@@ -36,7 +34,7 @@ class ServicedFloorServiceImpl @Inject constructor(
     }
 
     @Throws(RemoteException::class)
-    override fun updateServicedFloor(servicedFloor: ServicedFloor) {
-        elevatorControl.setServicesFloors(servicedFloor.elevatorNumber, servicedFloor.floorNumber, servicedFloor.isServiced)
+    override fun updateServicedFloor(servicedFloor: ServicedFloor, isServiced: Boolean) {
+        elevatorControl.setServicesFloors(servicedFloor.elevatorNumber, servicedFloor.floorNumber, isServiced)
     }
 }

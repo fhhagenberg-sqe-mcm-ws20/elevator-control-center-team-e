@@ -1,11 +1,10 @@
 package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.di.TestDI
-import at.fhhagenberg.sqe.di.RealIElevator
-import com.google.inject.Key
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import sqelevator.ConnectableIElevator
 import sqelevator.IElevator
 import java.rmi.RemoteException
 import kotlin.test.*
@@ -17,9 +16,9 @@ class ElevatorControlSystemServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = TestDI.createInjector()
+        val injector = TestDI.createMockInjector()
         service = injector.getInstance(ElevatorControlSystemService::class.java)
-        realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
+        realIElevator = injector.getInstance(ConnectableIElevator::class.java)
     }
 
     @Test

@@ -1,143 +1,148 @@
 package at.fhhagenberg.sqe.ui.elevator
 
-import at.fhhagenberg.sqe.di.StringsFile
+import at.fhhagenberg.sqe.adapter.ElevatorAdapter
+import at.fhhagenberg.sqe.di.key.AutoModeProperty
+import at.fhhagenberg.sqe.di.key.PollingInterval
 import at.fhhagenberg.sqe.entity.Direction
+import at.fhhagenberg.sqe.entity.DoorState
 import at.fhhagenberg.sqe.entity.Elevator
-import at.fhhagenberg.sqe.entity.ServicedFloor
-import at.fhhagenberg.sqe.repository.ActionCompleteListener
-import at.fhhagenberg.sqe.repository.ElevatorStore
-import at.fhhagenberg.sqe.repository.UpdateListener
-import at.fhhagenberg.sqe.viewmodel.BaseViewModel
+import at.fhhagenberg.sqe.entity.ElevatorControlSystem
+import at.fhhagenberg.sqe.model.Resource
+import at.fhhagenberg.sqe.repository.ElevatorControlSystemRepository
+import at.fhhagenberg.sqe.repository.ElevatorRepository
 import com.google.inject.Inject
+import javafx.beans.binding.Bindings
 import javafx.beans.property.*
+import javafx.beans.value.ChangeListener
 import javafx.collections.FXCollections
-import java.text.NumberFormat
-import java.util.*
 
 class ElevatorViewModelImpl @Inject constructor(
-        elevatorStore: ElevatorStore,
-        @StringsFile private val stringsBundle: ResourceBundle,
-        private val numberFormat: NumberFormat
-) : BaseViewModel(elevatorStore), ElevatorViewModel {
+        @AutoModeProperty override val autoModeProperty: BooleanProperty,
+        @PollingInterval val pollingInterval: Long,
+        private val elevatorRepository: ElevatorRepository,
+        private val elevatorControlSystemRepository: ElevatorControlSystemRepository,
+        private val elevatorAdapter: ElevatorAdapter
+) : ElevatorViewModel {
 
-    override val autoModeProperty = SimpleBooleanProperty(true)
-    override var autoMode: Boolean
-        get() = autoModeProperty.get()
-        set(value) = autoModeProperty.set(value)
+    override val elevatorNumberProperty = SimpleIntegerProperty(-1)
+    override val elevatorProperty = SimpleObjectProperty<Resource<Elevator>>(Resource.loading(null))
+    override val floorNumbers = FXCollections.observableArrayList<Int>()
+    override val currentPositionProperty = SimpleIntegerProperty(0)
+    override val buildingHeightProperty = SimpleIntegerProperty(0)
+    override val committedDirectionProperty = SimpleObjectProperty(Direction.UNKNOWN)
+    override val accelerationProperty = SimpleIntegerProperty()
+    override val doorStateProperty = SimpleObjectProperty(DoorState.UNKNOWN)
+    override val capacityProperty = SimpleIntegerProperty(0)
+    override val speedProperty = SimpleIntegerProperty(0)
+    override val weightProperty = SimpleIntegerProperty(0)
+    override val targetFloorProperty = SimpleIntegerProperty(-1)
+    override val pollingIntervalProperty = SimpleLongProperty(pollingInterval)
 
-    override val elevatorProperty = SimpleObjectProperty<Elevator>()
-    override val elevator: Elevator? get() = elevatorProperty.get()
+    override val elevatorNumber get() = elevatorNumberProperty.get()
 
-    override val servicedFloorNumbers = FXCollections.observableArrayList<Int>()
-    override val buttonsFloorNumbers = FXCollections.observableArrayList<Int>()
+    private var elevator: ReadOnlyObjectProperty<Resource<Elevator>>? = null
+    private var elevatorControlSystem: ReadOnlyObjectProperty<Resource<ElevatorControlSystem>>? = null
 
-    override val currentPositionProperty = SimpleIntegerProperty()
+    private val floorNumbersChangeListener: ChangeListener<Resource<ElevatorControlSystem>> = ChangeListener<Resource<ElevatorControlSystem>> { _, _, newValue ->
+        applyFloorNumbers(newValue)
+    }
 
-    override val floorHeightProperty = SimpleIntegerProperty()
+    override fun loadData(elevatorNumber: Int) {
+        destroy()
 
-    override val committedDirectionProperty = SimpleObjectProperty<Direction>()
-    override val systemStatusProperty = SimpleStringProperty()
-    override val accelerationProperty = SimpleStringProperty()
-    override val doorStateProperty = SimpleStringProperty()
-    override val capacityProperty = SimpleStringProperty()
-    override val speedProperty = SimpleStringProperty()
-    override val weightProperty = SimpleStringProperty()
-    override val clockTickRateProperty = SimpleStringProperty()
+        elevatorNumberProperty.set(elevatorNumber)
+        val elevator = elevatorRepository.getElevator(elevatorNumber)
+        val elevatorControlSystem = elevatorControlSystemRepository.getElevatorControlSystem()
 
-    override var elevatorNumber: Int = -1
+        val elevatorBinding = Bindings.createObjectBinding({
+            elevator.get() ?: Resource.loading<Elevator>(null)
+        }, elevator)
+        elevatorProperty.bind(elevatorBinding)
 
-    override fun createUpdateListener(): UpdateListener = { elevatorControlSystemResource ->
-        val elevator = elevatorControlSystemResource.data?.getElevator(elevatorNumber)
+        applyFloorNumbers(elevatorControlSystem.get())
+        elevatorControlSystem.addListener(floorNumbersChangeListener)
 
-        // Set floorHeight property
-        val floorHeight = elevatorControlSystemResource.data?.floorHeight
-        if (floorHeight != null && this.floorHeightProperty.get() != floorHeight) {
-            this.floorHeightProperty.set(floorHeight)
+        val currentPositionBinding = Bindings.createIntegerBinding({
+            elevator.get()?.data?.currentPosition ?: 0
+        }, elevator)
+        currentPositionProperty.bind(currentPositionBinding)
+
+        val buildingHeightBinding = Bindings.createIntegerBinding({
+            val floorHeight = elevatorControlSystem.get()?.data?.floorHeight ?: 0
+            val numberOfFloors = elevatorControlSystem.get()?.data?.numberOfFloors ?: 1
+            floorHeight * (numberOfFloors - 1)
+        }, elevatorControlSystem)
+        buildingHeightProperty.bind(buildingHeightBinding)
+
+        val committedDirectionBinding = Bindings.createObjectBinding({
+            elevator.get()?.data?.committedDirection ?: Direction.UNKNOWN
+        }, elevator)
+        committedDirectionProperty.bind(committedDirectionBinding)
+
+        val accelerationBinding = Bindings.createIntegerBinding({
+            elevator.get()?.data?.acceleration ?: 0
+        }, elevator)
+        accelerationProperty.bind(accelerationBinding)
+
+        val doorStateBinding = Bindings.createObjectBinding({
+            elevator.get()?.data?.doorState ?: DoorState.UNKNOWN
+        }, elevator)
+        doorStateProperty.bind(doorStateBinding)
+
+        val capacityBinding = Bindings.createIntegerBinding({
+            elevator.get()?.data?.capacity ?: 0
+        }, elevator)
+        capacityProperty.bind(capacityBinding)
+
+        val speedBinding = Bindings.createIntegerBinding({
+            elevator.get()?.data?.currentSpeed ?: 0
+        }, elevator)
+        speedProperty.bind(speedBinding)
+
+        val weightBinding = Bindings.createIntegerBinding({
+            elevator.get()?.data?.currentWeight ?: 0
+        }, elevator)
+        weightProperty.bind(weightBinding)
+
+        val targetFloorBinding = Bindings.createIntegerBinding({
+            elevator.get()?.data?.targetFloor ?: -1
+        }, elevator)
+        targetFloorProperty.bind(targetFloorBinding)
+
+        targetFloorProperty
+
+        this.elevator = elevator
+        this.elevatorControlSystem = elevatorControlSystem
+    }
+
+    override fun updateTargetFloor(targetFloor: Int) {
+        if (!autoModeProperty.get()) {
+            elevator?.get()?.data?.let { elevator ->
+                elevatorAdapter.updateTargetFloor(elevator, targetFloor)
+            }
         }
+    }
 
-        // Set system status property
-        val systemStatus = stringsBundle.getString("SystemStatus_${elevatorControlSystemResource.status}")
-        if (systemStatus != systemStatusProperty.get()) {
-            systemStatusProperty.set(systemStatus)
-        }
+    override fun destroy() {
+        elevatorControlSystem?.removeListener(floorNumbersChangeListener)
+        elevatorProperty.unbind()
+        currentPositionProperty.unbind()
+        buildingHeightProperty.unbind()
+        committedDirectionProperty.unbind()
+        accelerationProperty.unbind()
+        doorStateProperty.unbind()
+        capacityProperty.unbind()
+        speedProperty.unbind()
+        weightProperty.unbind()
+        targetFloorProperty.unbind()
+        pollingIntervalProperty.unbind()
+    }
 
-        // Set clockTickRate property
-        val hz = 1000.0 / elevatorStore.pollingInterval.toDouble()
-        val clockTickRate = numberFormat.format(hz)
-        if (clockTickRateProperty.get() != clockTickRate) {
-            clockTickRateProperty.set(clockTickRate)
-        }
-
-        if (elevatorNumber != -1) {
-            // Set elevator property
-            if (elevator != null && elevatorProperty.get() != elevator) {
-                elevatorProperty.set(elevator)
-            }
-
-            // Set servicedFloorNumbers property
-            val floorNumbers = elevator?.servicedFloors?.map { it.floorNumber }
-            if (floorNumbers != null && this.servicedFloorNumbers != floorNumbers) {
-                this.servicedFloorNumbers.setAll(floorNumbers)
-            }
-
-            // Set buttonsFloorNumbers property
-            val buttonsFloorNumbers = elevator?.buttons?.map { it.floorNumber }
-            if (buttonsFloorNumbers != null && this.buttonsFloorNumbers != buttonsFloorNumbers) {
-                this.buttonsFloorNumbers.setAll(buttonsFloorNumbers)
-            }
-
-            // Set current position property
-            if (elevator != null && currentPositionProperty.get() != elevator.currentPosition) {
-                currentPositionProperty.set(elevator.currentPosition)
-            }
-
-            // Set current direction property
-            if (elevator != null && committedDirectionProperty.get() != elevator.committedDirection) {
-                committedDirectionProperty.set(elevator.committedDirection)
-            }
-
-            // Set acceleration property
-            if (elevator != null) {
-                val acceleration = numberFormat.format(elevator.acceleration)
-                if (accelerationProperty.get() != acceleration) {
-                    accelerationProperty.set(acceleration)
-                }
-            }
-
-            // Set doorStatus property
-            if (elevator != null) {
-                val doorState = stringsBundle.getString("DoorState_${elevator.doorState.doorState}")
-                if (doorStateProperty.get() != doorState) {
-                    doorStateProperty.set(doorState)
-                }
-            }
-
-            // Set capacity property
-            if (elevator != null) {
-                val capacity = numberFormat.format(elevator.capacity)
-                if (capacityProperty.get() != capacity) {
-                    capacityProperty.set(capacity)
-                }
-            }
-
-            // Set speed property
-            if (elevator != null) {
-                val speed = numberFormat.format(elevator.currentSpeed)
-                if (speedProperty.get() != speed) {
-                    speedProperty.set(speed)
-                }
-            }
-
-            // Set speed property
-            if (elevator != null) {
-                val weight = numberFormat.format(elevator.currentWeight)
-                if (weightProperty.get() != weight) {
-                    weightProperty.set(weight)
-                }
-            }
-        } else {
-            if (elevatorProperty.get() != null) {
-                elevatorProperty.set(null)
+    private fun applyFloorNumbers(elevatorControlSystemResource: Resource<ElevatorControlSystem>?) {
+        elevatorControlSystemResource?.data?.let { elevatorControlSystem ->
+            val floorNumbers = elevatorControlSystem.floors.map { it.floorNumber }
+            if (this.floorNumbers != floorNumbers) {
+                this.floorNumbers.setAll(floorNumbers)
             }
         }
     }

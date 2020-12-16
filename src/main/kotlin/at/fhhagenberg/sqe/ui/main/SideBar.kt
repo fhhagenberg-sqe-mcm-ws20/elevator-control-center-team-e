@@ -6,19 +6,16 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.ToggleButton
 import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.VBox
+import java.util.*
 
 class SideBar(
         private val viewModel: MainViewModel,
+        private val resources: ResourceBundle,
         private val closeAction: () -> Unit
 ) : ScrollPane() {
 
-    private val listChangeListener = ListChangeListener<String> { change ->
-        clearElevatorViews()
-
-        // create a sidebar button for all elevators
-        for ((index, elevatorName) in change.list.withIndex()) {
-            addListItem(index, "sidebar-elevator-button", elevatorName)
-        }
+    private val listChangeListener = ListChangeListener<Int> { change ->
+        applyElevatorNumbers(change.list)
     }
 
     private val listBox = VBox()
@@ -32,7 +29,7 @@ class SideBar(
     private fun initView() {
         this.isFitToHeight = true
         this.isFitToWidth = true
-        this.pannableProperty().set(true)
+        this.isPannable = true
         this.hbarPolicy = ScrollBarPolicy.NEVER
         this.vbarPolicy = ScrollBarPolicy.NEVER
 
@@ -42,14 +39,24 @@ class SideBar(
         // add show overview button
         addListItem(-1, "sidebar-show-overview-button", "Overview")
 
-        viewModel.elevatorNames.addListener(listChangeListener)
+        applyElevatorNumbers(viewModel.elevatorNumbers)
+        viewModel.elevatorNumbers.addListener(listChangeListener)
 
-        viewModel.selectedElevatorNumberProperty.addListener { property, oldNumber, newNumber ->
+        viewModel.selectedElevatorNumberProperty.addListener { _, _, newNumber ->
             setToggleSelection(newNumber.toInt())
         }
         setToggleSelection(viewModel.selectedElevatorNumber)
 
         this.content = listBox
+    }
+
+    private fun applyElevatorNumbers(elevatorNumbers: List<Int>) {
+        clearElevatorViews()
+
+        // create a sidebar button for all elevators
+        for (elevatorNumber in elevatorNumbers) {
+            addListItem(elevatorNumber, "sidebar-elevator-button", "${resources.getString("Elevator")} ${elevatorNumber + 1}")
+        }
     }
 
     private fun setToggleSelection(number: Int) {
@@ -67,15 +74,16 @@ class SideBar(
         return button
     }
 
-    private fun addListItem(number: Int, buttonID: String, buttonText: String) {
+    private fun addListItem(elevatorNumber: Int, buttonID: String, buttonText: String) {
         val button = createButton(buttonID, buttonText)
         button.setOnAction {
-            if (viewModel.selectedElevatorNumber != number) {
-                viewModel.selectedElevatorNumber = number
+            if (viewModel.selectedElevatorNumber != elevatorNumber) {
+                viewModel.selectedElevatorNumber = elevatorNumber
                 closeAction()
             }
-            setToggleSelection(number)
+            setToggleSelection(elevatorNumber)
         }
+        button.id = "elevator_${elevatorNumber}"
         listBox.children.add(button)
         toggleGroup.toggles.add(button)
     }

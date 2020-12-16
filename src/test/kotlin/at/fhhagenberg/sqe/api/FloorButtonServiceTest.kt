@@ -1,11 +1,10 @@
 package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.di.TestDI
-import at.fhhagenberg.sqe.di.RealIElevator
-import com.google.inject.Key
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import sqelevator.ConnectableIElevator
 import sqelevator.IElevator
 import java.rmi.RemoteException
 import kotlin.test.*
@@ -17,9 +16,35 @@ class FloorButtonServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = TestDI.createInjector()
+        val injector = TestDI.createMockInjector()
         service = injector.getInstance(FloorButtonService::class.java)
-        realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
+        realIElevator = injector.getInstance(ConnectableIElevator::class.java)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testGetAll() {
+        val floorButtons = service.getAll(0)
+
+        assertEquals(2, floorButtons.size)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testGetAllNegativeElevators() {
+        Mockito.`when`(realIElevator.elevatorNum).thenReturn(-1)
+        val floorButtons = service.getAll(0)
+
+        assertEquals(0, floorButtons.size)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testGetAllNegativeFloors() {
+        Mockito.`when`(realIElevator.floorNum).thenReturn(-1)
+        val floorButtons = service.getAll(0)
+
+        assertEquals(0, floorButtons.size)
     }
 
     @Test
@@ -53,22 +78,5 @@ class FloorButtonServiceTest {
         Mockito.`when`(realIElevator.floorNum).thenReturn(-1)
 
         assertNull(service.get(0, 0))
-    }
-
-    @Test
-    @Throws(RemoteException::class)
-    fun testGetAll() {
-        val floorButtons = service.getAll(0)
-
-        assertEquals(2, floorButtons.size)
-    }
-
-    @Test
-    @Throws(RemoteException::class)
-    fun testGetAllNegativeElevators() {
-        Mockito.`when`(realIElevator.elevatorNum).thenReturn(-1)
-        val floorButtons = service.getAll(0)
-
-        assertEquals(0, floorButtons.size)
     }
 }

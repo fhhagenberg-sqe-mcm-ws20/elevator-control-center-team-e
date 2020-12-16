@@ -7,17 +7,33 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.layout.*
+import javafx.scene.paint.Color
+import java.text.NumberFormat
+import javax.security.auth.Destroyable
 
 class FloorButtonIndicator @Inject constructor(
-        val viewModel: FloorButtonViewModel) : BorderPane() {
+        val viewModel: FloorButtonViewModel,
+        private val numberFormat: NumberFormat
+) : BorderPane(), Destroyable {
 
     init {
         this.styleClass.add("floorButtonIndicator")
         initView()
     }
 
+    override fun destroy() {
+        viewModel.destroy()
+    }
+
     private fun initView() {
-        val backgroundBinding = Bindings.createObjectBinding({ Background(BackgroundFill(viewModel.backgroundColorProperty.get(), CornerRadii(4.0), Insets.EMPTY)) }, viewModel.backgroundColorProperty)
+        val backgroundBinding = Bindings.createObjectBinding({
+            val color = if (viewModel.activeProperty.get()) {
+                Color.valueOf("#ADFF00")
+            } else {
+                Color.valueOf("#C4C4C4")
+            }
+            Background(BackgroundFill(color, CornerRadii(4.0), Insets.EMPTY))
+        }, viewModel.activeProperty)
         this.backgroundProperty().bind(backgroundBinding)
 
         val contentContainerVertical = VBox()
@@ -27,8 +43,10 @@ class FloorButtonIndicator @Inject constructor(
         contentContainerVertical.children.add(contentContainerHorizontal)
 
         val centerLabel = Label()
-        centerLabel.text = viewModel.floorNumberProperty.get()
-        centerLabel.textProperty().bind(viewModel.floorNumberProperty)
+        val floorNumberBinding = Bindings.createStringBinding({
+            numberFormat.format(viewModel.floorNumberProperty.get() + 1)
+        }, viewModel.floorNumberProperty)
+        centerLabel.textProperty().bind(floorNumberBinding)
         centerLabel.styleClass.add("floorButtonIndicator-centerLabel")
         contentContainerHorizontal.children.add(centerLabel)
 

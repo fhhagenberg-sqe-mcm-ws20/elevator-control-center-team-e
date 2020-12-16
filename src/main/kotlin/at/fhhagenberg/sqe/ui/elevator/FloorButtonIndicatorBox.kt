@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.ui.elevator
 
+import at.fhhagenberg.sqe.util.Destroyable
 import com.google.inject.Injector
 import javafx.collections.ListChangeListener
 import javafx.geometry.Pos
@@ -11,19 +12,12 @@ import javafx.scene.layout.VBox
 class FloorButtonIndicatorBox (
         private val viewModel: ElevatorViewModel,
         private val injector: Injector
-        ) : BorderPane() {
+        ) : BorderPane(), Destroyable {
 
     private val buttonBox = VBox()
 
-    private val floorsListChangeListener = ListChangeListener<Int> { change ->
-        clearButtonBox()
-
-        for (buttonFloorNumber in change.list.reversed()) {
-            val floorButtonIndicator = injector.getInstance(FloorButtonIndicator::class.java)
-            floorButtonIndicator.viewModel.elevatorNumber = viewModel.elevatorNumber
-            floorButtonIndicator.viewModel.floorNumber = buttonFloorNumber
-            buttonBox.children.add(floorButtonIndicator)
-        }
+    private val floorNumbersChangeListener = ListChangeListener<Int> { change ->
+        applyFloorNumbers(change.list)
     }
 
     init {
@@ -31,11 +25,16 @@ class FloorButtonIndicatorBox (
         initView()
     }
 
+    override fun destroy() {
+        destroyFloorButtonIndicators()
+        viewModel.floorNumbers.removeListener(floorNumbersChangeListener)
+    }
+
     private fun initView() {
         buttonBox.styleClass.add("floorButtonIndicatorBox-buttonBox")
 
-        // TODO: change this and listen to viewmodel.elevator.buttons instead
-        viewModel.buttonsFloorNumbers.addListener(floorsListChangeListener)
+        applyFloorNumbers(viewModel.floorNumbers)
+        viewModel.floorNumbers.addListener(floorNumbersChangeListener)
         this.center = buttonBox
 
         val componentNameLabelContainer = HBox()
@@ -46,10 +45,24 @@ class FloorButtonIndicatorBox (
         this.bottom = componentNameLabelContainer
     }
 
-    private fun clearButtonBox() {
-        for (indicator in buttonBox.children) {
-            (indicator as FloorButtonIndicator).viewModel.destroy()
+    private fun applyFloorNumbers(floorNumbers: List<Int>) {
+        clearButtonBox()
+
+        for (floorNumber in floorNumbers.reversed()) {
+            val floorButtonIndicator = injector.getInstance(FloorButtonIndicator::class.java)
+            floorButtonIndicator.viewModel.loadData(viewModel.elevatorNumber, floorNumber)
+            buttonBox.children.add(floorButtonIndicator)
         }
+    }
+
+    private fun clearButtonBox() {
+        destroyFloorButtonIndicators()
         buttonBox.children.clear()
+    }
+
+    private fun destroyFloorButtonIndicators() {
+        for (indicator in buttonBox.children) {
+            (indicator as FloorButtonIndicator).destroy()
+        }
     }
 }

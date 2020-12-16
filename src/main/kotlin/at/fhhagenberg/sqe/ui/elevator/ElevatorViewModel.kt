@@ -1,36 +1,31 @@
 package at.fhhagenberg.sqe.ui.elevator
 
 import at.fhhagenberg.sqe.entity.Direction
+import at.fhhagenberg.sqe.entity.DoorState
 import at.fhhagenberg.sqe.entity.Elevator
-import at.fhhagenberg.sqe.entity.ServicedFloor
-import at.fhhagenberg.sqe.repository.ActionCompleteListener
+import at.fhhagenberg.sqe.model.Resource
 import at.fhhagenberg.sqe.viewmodel.ViewModel
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.IntegerProperty
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.StringProperty
+import javafx.beans.property.*
 import javafx.collections.ObservableList
 
 interface ElevatorViewModel : ViewModel {
-    val autoModeProperty: BooleanProperty
-    var autoMode: Boolean
+    val autoModeProperty: ReadOnlyBooleanProperty
+    val elevatorNumberProperty: ReadOnlyIntegerProperty
+    val elevatorProperty: ReadOnlyObjectProperty<Resource<Elevator>>
+    val floorNumbers: ObservableList<Int>
+    val currentPositionProperty: ReadOnlyIntegerProperty
+    val buildingHeightProperty: ReadOnlyIntegerProperty
+    val committedDirectionProperty: ReadOnlyObjectProperty<Direction>
+    val accelerationProperty: ReadOnlyIntegerProperty
+    val doorStateProperty: ReadOnlyObjectProperty<DoorState>
+    val capacityProperty: ReadOnlyIntegerProperty
+    val speedProperty: ReadOnlyIntegerProperty
+    val weightProperty: ReadOnlyIntegerProperty
+    val targetFloorProperty: ReadOnlyIntegerProperty
+    val pollingIntervalProperty: ReadOnlyLongProperty
 
-    val elevatorProperty: ObjectProperty<Elevator>
-    val elevator: Elevator?
+    val elevatorNumber: Int
+    fun loadData(elevatorNumber: Int)
 
-    val servicedFloorNumbers: ObservableList<Int>
-    val buttonsFloorNumbers: ObservableList<Int>
-
-    val currentPositionProperty: IntegerProperty
-    val floorHeightProperty: IntegerProperty
-    val committedDirectionProperty: ObjectProperty<Direction>
-    val systemStatusProperty: StringProperty
-    val accelerationProperty: StringProperty
-    val doorStateProperty: StringProperty
-    val capacityProperty: StringProperty
-    val speedProperty: StringProperty
-    val weightProperty: StringProperty
-    val clockTickRateProperty: StringProperty
-
-    var elevatorNumber: Int
+    fun updateTargetFloor(targetFloor: Int)
 }

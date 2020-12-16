@@ -1,19 +1,18 @@
 package at.fhhagenberg.sqe.ui.floor
 
+import at.fhhagenberg.sqe.util.Destroyable
 import com.google.inject.Inject
 import javafx.beans.binding.Bindings
 import javafx.geometry.Pos
-import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
-import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 
 class OverviewFloorButtonBox @Inject constructor(
         val viewModel: FloorViewModel
-) : BorderPane() {
+) : BorderPane(), Destroyable {
 
     private val upActiveImages = mapOf(
             true to Image("/icons/elevatorUpButtonActive.png"),
@@ -28,6 +27,10 @@ class OverviewFloorButtonBox @Inject constructor(
     init {
         this.styleClass.add("elevatorLiveViewFloorBox")
         initView()
+    }
+
+    override fun destroy() {
+        viewModel.destroy()
     }
 
     private fun initView() {
@@ -61,11 +64,7 @@ class OverviewFloorButtonBox @Inject constructor(
         this.left = leftContainerBox
     }
 
-    fun initElevatorNumber(elevatorNumber: Int) {
-        viewModel.elevatorNumber = elevatorNumber
-    }
-
-    fun initFloorNumber(floorNumber: Int) {
-        viewModel.floorNumber = floorNumber
+    fun loadData(floorNumber: Int) {
+        viewModel.loadData(floorNumber)
     }
 }

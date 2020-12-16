@@ -1,12 +1,12 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem
 import com.google.inject.Inject
-import sqelevator.IElevator
+import sqelevator.ConnectableIElevator
 import java.rmi.RemoteException
 
 class ElevatorControlSystemServiceImpl @Inject constructor(
-        private val elevatorControl: IElevator,
+        private val elevatorControl: ConnectableIElevator,
         private val elevatorService: ElevatorService,
         private val buildingFloorService: BuildingFloorService
 ) : ElevatorControlSystemService {

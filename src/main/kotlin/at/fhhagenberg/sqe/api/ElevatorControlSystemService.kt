@@ -1,4 +1,4 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem
 import java.rmi.RemoteException

@@ -9,7 +9,7 @@ import java.util.*
 
 class TopBar(
         private val mainViewModel: MainViewModel,
-        private val resources: ResourceBundle?
+        private val resources: ResourceBundle
 ) : HBox() {
 
     init {
@@ -23,8 +23,11 @@ class TopBar(
     }
 
     private fun createRefreshButton() : Button {
-        val button = Button("refresh")
+        val button = Button(resources.getString("Refresh"))
         button.styleClass.add("topBar-refresh-button")
+        button.setOnMouseClicked {
+            mainViewModel.refresh()
+        }
 
         val image = Image("/icons/refreshIcon.png")
         val imageView = ImageView(image)
@@ -38,8 +41,9 @@ class TopBar(
 
     private fun createAutoModeToggleButton() : JFXToggleButton {
         val button = JFXToggleButton()
+        button.id = "automodeswitch"
         button.styleClass.add("topBar-auto-toggle")
-        button.text = resources?.getString("AutoMode")
+        button.text = resources.getString("AutoMode")
         button.selectedProperty().bindBidirectional(mainViewModel.autoModeProperty)
         return button
     }

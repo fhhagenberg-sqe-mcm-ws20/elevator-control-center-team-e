@@ -1,16 +1,13 @@
 package at.fhhagenberg.sqe.ui.floorbutton
 
 import at.fhhagenberg.sqe.viewmodel.ViewModel
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.ObjectProperty
-import javafx.beans.property.StringProperty
-import javafx.scene.paint.Color
+import javafx.beans.property.*
 
 interface FloorButtonViewModel : ViewModel {
-    val floorNumberProperty: StringProperty
-    val activeProperty: BooleanProperty
-    val backgroundColorProperty: ObjectProperty<Color>
+    val floorNumberProperty: ReadOnlyIntegerProperty
+    val activeProperty: ReadOnlyBooleanProperty
 
-    var floorNumber: Int
-    var elevatorNumber: Int
+    val elevatorNumber: Int
+    val floorNumber: Int
+    fun loadData(elevatorNumber: Int, floorNumber: Int)
 }

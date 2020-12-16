@@ -1,35 +1,39 @@
 package at.fhhagenberg.sqe.ui.elevator
 
-import at.fhhagenberg.sqe.di.StringsFile
 import at.fhhagenberg.sqe.ui.common.BaseView
 import com.google.inject.Inject
 import com.google.inject.Injector
 import javafx.fxml.FXML
 import javafx.geometry.Insets
-import javafx.geometry.Pos
 import javafx.scene.control.ScrollPane
 import javafx.scene.layout.BorderPane
-import javafx.scene.layout.HBox
 import java.net.URL
+import java.text.NumberFormat
 import java.util.*
 
 class ElevatorView @Inject constructor(
         viewModel: ElevatorViewModel,
         private val injector: Injector,
-        @StringsFile private val stringsBundle: ResourceBundle
+        private val numberFormat: NumberFormat
 ) : BaseView<ElevatorViewModel>(viewModel) {
 
     @FXML
     private lateinit var elevatorViewRootBorderPane: BorderPane
+
+    private lateinit var elevatorLiveViewBox: ElevatorLiveViewBox
+
+    private lateinit var floorButtonIndicatorBox: FloorButtonIndicatorBox
+
+    private lateinit var elevatorMetricsBox: ElevatorMetricsBox
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         val containerBorderPane = BorderPane()
         containerBorderPane.styleClass.add("elevatorView-containerBorderPane")
 
         // create view components
-        val elevatorLiveViewBox = ElevatorLiveViewBox(viewModel, injector)
-        val floorButtonIndicatorBox = FloorButtonIndicatorBox(viewModel, injector)
-        val elevatorMetricsBox = ElevatorMetricsBox(viewModel, stringsBundle)
+        elevatorLiveViewBox = ElevatorLiveViewBox(viewModel, injector, resources!!)
+        floorButtonIndicatorBox = FloorButtonIndicatorBox(viewModel, injector)
+        elevatorMetricsBox = ElevatorMetricsBox(viewModel, resources, numberFormat)
 
         // add view components to view
         containerBorderPane.left = floorButtonIndicatorBox
@@ -43,11 +47,11 @@ class ElevatorView @Inject constructor(
 
         val elevatorContainerScrollPane = ScrollPane()
         elevatorContainerScrollPane.styleClass.add("elevatorViewScrollPane")
-        elevatorContainerScrollPane.pannableProperty().set(true)
-        elevatorContainerScrollPane.vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
         elevatorContainerScrollPane.isFitToHeight = true
-        elevatorContainerScrollPane.hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
         elevatorContainerScrollPane.isFitToWidth = true
+        elevatorContainerScrollPane.isPannable = true
+        elevatorContainerScrollPane.hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
+        elevatorContainerScrollPane.vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
         elevatorContainerScrollPane.content = containerBorderPane
 
         elevatorViewRootBorderPane.center = elevatorContainerScrollPane
@@ -55,6 +59,12 @@ class ElevatorView @Inject constructor(
     }
 
     fun initElevatorNumber(elevatorNumber: Int) {
-        viewModel.elevatorNumber = elevatorNumber
+        viewModel.loadData(elevatorNumber)
+    }
+
+    override fun destroy() {
+        super.destroy()
+        elevatorLiveViewBox.destroy()
+        floorButtonIndicatorBox.destroy()
     }
 }

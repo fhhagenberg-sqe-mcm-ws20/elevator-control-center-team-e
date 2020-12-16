@@ -1,5 +1,6 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
+import at.fhhagenberg.sqe.entity.Direction
 import at.fhhagenberg.sqe.entity.Elevator
 import java.rmi.RemoteException
 
@@ -11,8 +12,5 @@ interface ElevatorService {
     fun get(elevatorNumber: Int): Elevator?
 
     @Throws(RemoteException::class)
-    fun updateCommittedDirection(elevator: Elevator)
-
-    @Throws(RemoteException::class)
-    fun updateTargetFloor(elevator: Elevator)
+    fun updateTargetFloor(elevator: Elevator, targetFloor: Int)
 }

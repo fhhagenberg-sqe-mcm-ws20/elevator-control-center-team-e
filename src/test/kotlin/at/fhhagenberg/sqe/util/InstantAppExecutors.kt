@@ -12,4 +12,5 @@ class InstantAppExecutors : AppExecutors(
             Executor { it.run() }
         }
     }
+    override fun shutdown() { }
 }

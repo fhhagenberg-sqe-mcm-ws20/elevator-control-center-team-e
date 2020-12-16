@@ -1,8 +1,9 @@
 package at.fhhagenberg.sqe.ui.floor
 
+import at.fhhagenberg.sqe.ui.elevator.ElevatorViewModel
+import at.fhhagenberg.sqe.util.Destroyable
 import at.fhhagenberg.sqe.util.ViewUtils.setPressAnimationsEnabled
 import com.google.inject.Inject
-import javafx.animation.ScaleTransition
 import javafx.beans.binding.Bindings
 import javafx.geometry.Pos
 import javafx.scene.control.Label
@@ -12,11 +13,13 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
-import javafx.util.Duration
+import javafx.scene.paint.Color
 
 class ElevatorLiveViewFloorBox @Inject constructor(
-        val viewModel: FloorViewModel
-) : BorderPane() {
+        private val servicedFloorViewModel: ServicedFloorViewModel,
+        private val floorViewModel: FloorViewModel,
+        private val elevatorViewModel: ElevatorViewModel
+) : BorderPane(), Destroyable {
 
     private val upActiveImages = mapOf(
             true to Image("/icons/elevatorUpButtonActive.png"),
@@ -33,9 +36,17 @@ class ElevatorLiveViewFloorBox @Inject constructor(
             false to Image("/icons/floorNotServiced.png")
     )
 
+    private lateinit var floorNumberLabel: Label
+
     init {
         this.styleClass.add("elevatorLiveViewFloorBox")
         initView()
+    }
+
+    override fun destroy() {
+        servicedFloorViewModel.destroy()
+        floorViewModel.destroy()
+        elevatorViewModel.destroy()
     }
 
     private fun initView() {
@@ -48,17 +59,16 @@ class ElevatorLiveViewFloorBox @Inject constructor(
 
         val upButtonImageView = ImageView()
         val upImageBinding = Bindings.createObjectBinding({
-            upActiveImages.getValue(viewModel.upActiveProperty.get())
-        }, viewModel.upActiveProperty)
+            upActiveImages.getValue(floorViewModel.upActiveProperty.get())
+        }, floorViewModel.upActiveProperty)
         upButtonImageView.imageProperty().bind(upImageBinding)
         upButtonImageView.fitHeight = 14.0
         upButtonImageView.isPreserveRatio = true
 
-
         val downButtonImageView = ImageView()
         val downImageBinding = Bindings.createObjectBinding({
-            downActiveImages.getValue(viewModel.downActiveProperty.get())
-        }, viewModel.downActiveProperty)
+            downActiveImages.getValue(floorViewModel.downActiveProperty.get())
+        }, floorViewModel.downActiveProperty)
         downButtonImageView.imageProperty().bind(downImageBinding)
         downButtonImageView.fitHeight = 14.0
         downButtonImageView.isPreserveRatio = true
@@ -68,29 +78,25 @@ class ElevatorLiveViewFloorBox @Inject constructor(
 
         this.left = leftContainerBox
 
-
-
         val centerSpacerPane = Pane()
         centerSpacerPane.style = ("-fx-min-width: 100")
         this.center = centerSpacerPane
-
-
 
         val rightContainerBox = HBox(8.0)
         rightContainerBox.alignment = Pos.CENTER_RIGHT
 
         val servicesFloorImageView = ImageView()
         val servicesImageBinding = Bindings.createObjectBinding({
-            servicesFloorImages[viewModel.servicesFloorProperty.get()]
-        }, viewModel.servicesFloorProperty)
+            servicesFloorImages[servicedFloorViewModel.servicesFloorProperty.get()]
+        }, servicedFloorViewModel.servicesFloorProperty)
         servicesFloorImageView.imageProperty().bind(servicesImageBinding)
         servicesFloorImageView.fitHeight = 18.0
         servicesFloorImageView.isPreserveRatio = true
         servicesFloorImageView.setOnMouseClicked {
-            viewModel.updateServicedFloor(!viewModel.servicesFloorProperty.get())
+            servicedFloorViewModel.updateServicedFloor(!servicedFloorViewModel.servicesFloorProperty.get())
         }
-        servicesFloorImageView.setPressAnimationsEnabled(!viewModel.autoModeProperty.get())
-        viewModel.autoModeProperty.addListener { _, _, newValue ->
+        servicesFloorImageView.setPressAnimationsEnabled(!servicedFloorViewModel.autoModeProperty.get())
+        servicedFloorViewModel.autoModeProperty.addListener { _, _, newValue ->
             servicesFloorImageView.setPressAnimationsEnabled(!newValue)
         }
 
@@ -98,16 +104,29 @@ class ElevatorLiveViewFloorBox @Inject constructor(
 
         val floorNumberLabelContainer = VBox()
         floorNumberLabelContainer.alignment = Pos.CENTER_RIGHT
-        val floorNumberLabel = Label()
-        floorNumberLabel.text = viewModel.floorNumberProperty.get()
-        floorNumberLabel.textProperty().bind(viewModel.floorNumberProperty)
-        floorNumberLabel.textFillProperty().bind(viewModel.floorColorProperty)
+        floorNumberLabel = Label()
+        val floorNumberBinding = Bindings.createStringBinding({
+            "${servicedFloorViewModel.floorNumberProperty.get() + 1}"
+        }, servicedFloorViewModel.floorNumberProperty)
+        floorNumberLabel.textProperty().bind(floorNumberBinding)
+
+        val colorBinding = Bindings.createObjectBinding({
+            if (elevatorViewModel.targetFloorProperty.get() == floorViewModel.floorNumberProperty.get()) {
+                Color.valueOf("#ADFF00")
+            } else {
+                Color.valueOf("#E9E9E9")
+            }
+        }, elevatorViewModel.targetFloorProperty)
+        floorNumberLabel.textFillProperty().bind(colorBinding)
         floorNumberLabel.styleClass.add("elevatorLiveViewFloorBox-floorNumberLabel")
         floorNumberLabel.setOnMouseClicked {
-            viewModel.updateTargetFloor(viewModel.floorNumber)
+            elevatorViewModel.updateTargetFloor(floorViewModel.floorNumberProperty.get())
         }
-        floorNumberLabel.setPressAnimationsEnabled(!viewModel.autoModeProperty.get())
-        viewModel.autoModeProperty.addListener { _, _, newValue ->
+
+        elevatorViewModel.targetFloorProperty
+
+        floorNumberLabel.setPressAnimationsEnabled(!servicedFloorViewModel.autoModeProperty.get())
+        servicedFloorViewModel.autoModeProperty.addListener { _, _, newValue ->
             floorNumberLabel.setPressAnimationsEnabled(!newValue)
         }
         floorNumberLabelContainer.children.add(floorNumberLabel)
@@ -115,11 +134,10 @@ class ElevatorLiveViewFloorBox @Inject constructor(
         this.right = rightContainerBox
     }
 
-    fun initElevatorNumber(elevatorNumber: Int) {
-        viewModel.elevatorNumber = elevatorNumber
-    }
-
-    fun initFloorNumber(floorNumber: Int) {
-        viewModel.floorNumber = floorNumber
+    fun loadData(elevatorNumber: Int, floorNumber: Int) {
+        floorNumberLabel.id = "floornumberlabel_${elevatorNumber}_${floorNumber}"
+        servicedFloorViewModel.loadData(elevatorNumber, floorNumber)
+        floorViewModel.loadData(floorNumber)
+        elevatorViewModel.loadData(elevatorNumber)
     }
 }

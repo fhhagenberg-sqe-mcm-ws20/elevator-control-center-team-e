@@ -1,12 +1,7 @@
 package sqelevator
 
-import at.fhhagenberg.sqe.di.RealIElevator
-import com.google.inject.Inject
-
-class CachedElevatorControl
-@Inject
-constructor (
-        @RealIElevator private val elevatorControl: IElevator
+class CachedElevatorControl constructor (
+        private val elevatorControl: IElevator
 ) : IElevator {
 
     private var elevatorNum: Int? = null

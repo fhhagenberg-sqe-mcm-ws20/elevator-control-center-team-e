@@ -1,14 +1,13 @@
 package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.di.TestDI
-import at.fhhagenberg.sqe.di.RealIElevator
 import at.fhhagenberg.sqe.entity.Direction
 import at.fhhagenberg.sqe.entity.DoorState
-import com.google.inject.Key
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
+import sqelevator.ConnectableIElevator
 import sqelevator.IElevator
 import java.rmi.RemoteException
 import kotlin.test.*
@@ -20,9 +19,9 @@ class ElevatorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        val injector = TestDI.createInjector()
+        val injector = TestDI.createMockInjector()
         service = injector.getInstance(ElevatorService::class.java)
-        realIElevator = injector.getInstance(Key.get(IElevator::class.java, RealIElevator::class.java))
+        realIElevator = injector.getInstance(ConnectableIElevator::class.java)
     }
 
     @Test
@@ -68,47 +67,51 @@ class ElevatorServiceTest {
 
     @Test
     @Throws(RemoteException::class)
-    fun testUpdateCommittedDirection() {
-        val elevator = service.get(0)!!
-        elevator.committedDirection = Direction.UP
-        service.updateCommittedDirection(elevator)
+    fun testGetInvalidElevatorNumber() {
+        val elevator = service.get(-1)
 
-        Mockito.verify(realIElevator).setCommittedDirection(0, Direction.UP.direction)
+        assertNull(elevator)
     }
 
     @Test
     @Throws(RemoteException::class)
-    fun testUpdateCommittedDirectionError() {
-        Mockito.`when`(realIElevator.setCommittedDirection(0, Direction.UP.direction)).thenThrow(RemoteException())
+    fun testUpdateTargetFloorUncommitted() {
         val elevator = service.get(0)!!
-        elevator.committedDirection = Direction.UP
-
-        assertThrows<RemoteException> {
-            service.updateCommittedDirection(elevator)
-        }
-        Mockito.verify(realIElevator).setCommittedDirection(0, Direction.UP.direction)
-    }
-
-    @Test
-    @Throws(RemoteException::class)
-    fun testUpdateTargetFloor() {
-        val elevator = service.get(0)!!
-        elevator.targetFloor = 1
-        service.updateTargetFloor(elevator)
+        service.updateTargetFloor(elevator, 1)
 
         Mockito.verify(realIElevator).setTarget(0, 1)
+        Mockito.verify(realIElevator).setCommittedDirection(0, Direction.UNCOMMITTED.direction)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testUpdateTargetFloorDown() {
+        val elevator = service.get(0)!!
+        service.updateTargetFloor(elevator, 0)
+
+        Mockito.verify(realIElevator).setTarget(0, 0)
+        Mockito.verify(realIElevator).setCommittedDirection(0, Direction.DOWN.direction)
+    }
+
+    @Test
+    @Throws(RemoteException::class)
+    fun testUpdateTargetFloorUp() {
+        Mockito.`when`(realIElevator.getElevatorFloor(0)).thenReturn(0)
+        val elevator = service.get(0)!!
+        service.updateTargetFloor(elevator, 1)
+
+        Mockito.verify(realIElevator).setTarget(0, 1)
+        Mockito.verify(realIElevator).setCommittedDirection(0, Direction.UP.direction)
     }
 
     @Test
     @Throws(RemoteException::class)
     fun testUpdateTargetFloorError() {
-        Mockito.`when`(realIElevator.setTarget(0, 1)).thenThrow(RemoteException())
         val elevator = service.get(0)!!
-        elevator.targetFloor = 1
+        Mockito.`when`(realIElevator.setTarget(0, 1)).thenThrow(RemoteException())
 
         assertThrows<RemoteException> {
-            service.updateTargetFloor(elevator)
+            service.updateTargetFloor(elevator, 1)
         }
-        Mockito.verify(realIElevator).setTarget(0, 1)
     }
 }

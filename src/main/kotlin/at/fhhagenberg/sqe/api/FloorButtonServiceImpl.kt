@@ -1,13 +1,13 @@
-package at.fhhagenberg.sqe.api;
+package at.fhhagenberg.sqe.api
 
 import at.fhhagenberg.sqe.entity.FloorButton
 import com.google.inject.Inject
-import sqelevator.IElevator
+import sqelevator.ConnectableIElevator
 import java.rmi.RemoteException
 import java.util.*
 
 class FloorButtonServiceImpl @Inject constructor(
-        private val elevatorControl: IElevator
+        private val elevatorControl: ConnectableIElevator
 ) : FloorButtonService {
     @Throws(RemoteException::class)
     override fun getAll(elevatorNumber: Int): List<FloorButton> {
@@ -16,9 +16,7 @@ class FloorButtonServiceImpl @Inject constructor(
         val floorButtons: MutableList<FloorButton> = ArrayList(totalNumberOfFloors.coerceAtLeast(0))
         if (elevatorNumber in 0 until totalNumberOfElevators) {
             for (floorNumber in 0 until totalNumberOfFloors) {
-                get(elevatorNumber, floorNumber)?.let { button ->
-                    floorButtons.add(button)
-                }
+                floorButtons.add(get(elevatorNumber, floorNumber)!!)
             }
         }
         return floorButtons
