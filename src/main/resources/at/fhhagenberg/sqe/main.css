@@ -5,7 +5,25 @@
     -fx-font-weight: bold;
 }
 
-
+/* ErrorBar.kt */
+.errorBarMain {
+    -fx-padding: 8 25;
+    -fx-background-color: rgba(0,0,255,0.96);
+    -fx-background-radius: 25;
+    -fx-alignment: 'center';
+    -fx-spacing: 100;
+}
+.errorMessageLabel {
+    -fx-font-size: 12pt;
+    -fx-font-weight: bolder;
+    -fx-text-fill: "#ffffff";
+}
+.errorBarActionButton {
+    -fx-background-color: '#ffffff';
+    -fx-text-fill: rgba(0,0,255,0.96);
+    -fx-background-radius: 25;
+    -fx-font-weight: bolder;
+}
 
 /* MainView */
 .mainViewRootBorderPane {
@@ -143,8 +161,8 @@
 }
 
 .floorButtonIndicator {
-    -fx-pref-height: 40;
-    -fx-pref-width: 40;
+    -fx-pref-height: 50;
+    -fx-pref-width: 50;
     -fx-padding: 2 10 2 10;
 }
 .floorButtonIndicator-centerLabel {
@@ -244,6 +262,11 @@
 .overviewViewScrollPane {
     -fx-background: '#A3A3A3';
     -fx-border-color: '#A3A3A3';
+    -fx-background-color: transparent;
+}
+.overviewViewParentScrollPane {
+    -fx-background: transparent;
+    -fx-border-color: transparent;
     -fx-background-color: transparent;
 }
 

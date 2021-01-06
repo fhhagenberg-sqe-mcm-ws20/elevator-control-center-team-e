@@ -18,6 +18,7 @@ class ServicedFloorViewModelTest {
     private lateinit var viewModel: ServicedFloorViewModel
     private lateinit var realIElevator: IElevator
     private lateinit var autoModeProperty: BooleanProperty
+    private lateinit var updateElevatorStoreTask: UpdateElevatorStoreTask
 
     @BeforeEach
     fun setUp() {
@@ -25,11 +26,12 @@ class ServicedFloorViewModelTest {
         viewModel = injector.getInstance(ServicedFloorViewModel::class.java)
         realIElevator = injector.getInstance(ConnectableIElevator::class.java)
         autoModeProperty = injector.getInstance(Key.get(BooleanProperty::class.java, AutoModeProperty::class.java))
-        injector.getInstance(UpdateElevatorStoreTask::class.java).fetchData()
+        updateElevatorStoreTask = injector.getInstance(UpdateElevatorStoreTask::class.java)
     }
 
     @Test
     fun testAutoMode() {
+        updateElevatorStoreTask.fetchData()
         viewModel.loadData(1, 1)
         val autoMode = viewModel.autoModeProperty.get()
 
@@ -38,6 +40,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testFloorNumber() {
+        updateElevatorStoreTask.fetchData()
         viewModel.loadData(1, 1)
         val floorNumber = viewModel.floorNumberProperty.get()
 
@@ -46,6 +49,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testServicesFloor() {
+        updateElevatorStoreTask.fetchData()
         viewModel.loadData(1, 1)
         val servicesFloor = viewModel.servicesFloorProperty.get()
 
@@ -54,10 +58,39 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testUpdateServicedFloor() {
+        updateElevatorStoreTask.fetchData()
         viewModel.loadData(1, 1)
         autoModeProperty.set(false)
         viewModel.updateServicedFloor(false)
 
-        Mockito.verify(realIElevator).setServicesFloors(1, 1, false)
+        Mockito.verify(realIElevator, Mockito.times(1)).setServicesFloors(1, 1, false)
+    }
+
+    @Test
+    fun testUpdateServicedFloorAutoMode() {
+        updateElevatorStoreTask.fetchData()
+        viewModel.loadData(1, 1)
+        autoModeProperty.set(true)
+        viewModel.updateServicedFloor(false)
+
+        Mockito.verify(realIElevator, Mockito.times(0)).setServicesFloors(1, 1, false)
+    }
+
+    @Test
+    fun testUpdateServicedFloorDataNotLoaded() {
+        updateElevatorStoreTask.fetchData()
+        autoModeProperty.set(false)
+        viewModel.updateServicedFloor(false)
+
+        Mockito.verify(realIElevator, Mockito.times(0)).setServicesFloors(1, 1, false)
+    }
+
+    @Test
+    fun testUpdateServicedFloorDataNotFetched() {
+        viewModel.loadData(1, 1)
+        autoModeProperty.set(false)
+        viewModel.updateServicedFloor(false)
+
+        Mockito.verify(realIElevator, Mockito.times(0)).setServicesFloors(1, 1, false)
     }
 }

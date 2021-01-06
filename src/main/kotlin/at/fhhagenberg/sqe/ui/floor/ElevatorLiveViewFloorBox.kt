@@ -36,6 +36,7 @@ class ElevatorLiveViewFloorBox @Inject constructor(
             false to Image("/icons/floorNotServiced.png")
     )
 
+    private lateinit var servicesFloorImageView: ImageView
     private lateinit var floorNumberLabel: Label
 
     init {
@@ -85,7 +86,7 @@ class ElevatorLiveViewFloorBox @Inject constructor(
         val rightContainerBox = HBox(8.0)
         rightContainerBox.alignment = Pos.CENTER_RIGHT
 
-        val servicesFloorImageView = ImageView()
+        servicesFloorImageView = ImageView()
         val servicesImageBinding = Bindings.createObjectBinding({
             servicesFloorImages[servicedFloorViewModel.servicesFloorProperty.get()]
         }, servicedFloorViewModel.servicesFloorProperty)
@@ -135,6 +136,7 @@ class ElevatorLiveViewFloorBox @Inject constructor(
     }
 
     fun loadData(elevatorNumber: Int, floorNumber: Int) {
+        servicesFloorImageView.id = "servicesfloorimage_${elevatorNumber}_${floorNumber}"
         floorNumberLabel.id = "floornumberlabel_${elevatorNumber}_${floorNumber}"
         servicedFloorViewModel.loadData(elevatorNumber, floorNumber)
         floorViewModel.loadData(floorNumber)

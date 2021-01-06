@@ -19,7 +19,6 @@ class ServicedFloorViewModelImpl @Inject constructor(
     override val servicesFloorProperty = SimpleBooleanProperty(true)
 
     private var elevatorNumber = -1
-    private val floorNumber get() = floorNumberProperty.get()
 
     private var servicedFloor: ReadOnlyObjectProperty<Resource<ServicedFloor>>? = null
 

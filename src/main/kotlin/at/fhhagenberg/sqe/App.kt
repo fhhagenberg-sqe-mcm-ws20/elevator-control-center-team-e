@@ -40,9 +40,7 @@ class App : Application() {
         val mainFxmlView = viewLoader.loadView(MainView::class.java)
 
         // Set main view
-        val decorator = JFXDecorator(stage, mainFxmlView.view)
-        decorator.isCustomMaximize = true
-        val scene = Scene(decorator)
+        val scene = Scene(mainFxmlView.view)
         stage.icons.add(Image("/icons/elevator.png"))
         stage.scene = scene
         scene.stylesheets.add(javaClass.getResource("main.css").toExternalForm())

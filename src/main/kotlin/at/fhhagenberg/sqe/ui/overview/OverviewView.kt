@@ -35,7 +35,16 @@ class OverviewView @Inject constructor(
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         val backgroundBorderPane = BorderPane()
         backgroundBorderPane.styleClass.add("overviewViewBackgroundBorderPane")
-        overviewViewRootBorderPane.center = backgroundBorderPane
+
+        val verticalParentScrollPane = ScrollPane()
+        verticalParentScrollPane.styleClass.add("overviewViewParentScrollPane")
+        verticalParentScrollPane.isFitToHeight = true
+        verticalParentScrollPane.isFitToWidth = true
+        verticalParentScrollPane.isPannable = true
+        verticalParentScrollPane.hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
+        verticalParentScrollPane.vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
+        verticalParentScrollPane.content = backgroundBorderPane
+        overviewViewRootBorderPane.center = verticalParentScrollPane
 
         val elevatorContainerScrollPane = ScrollPane()
         elevatorContainerScrollPane.styleClass.add("overviewViewScrollPane")

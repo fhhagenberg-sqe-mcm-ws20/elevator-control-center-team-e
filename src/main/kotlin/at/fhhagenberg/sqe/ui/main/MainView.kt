@@ -16,15 +16,18 @@ import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition
 import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
 import javafx.geometry.Insets
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import javafx.util.Duration
 import java.net.URL
 import java.util.*
 
+
 class MainView @Inject constructor(
-        viewModel: MainViewModel,
-        private val viewLoader: ViewLoader
+    viewModel: MainViewModel,
+    private val viewLoader: ViewLoader
 ) : BaseView<MainViewModel>(viewModel) {
 
     @FXML
@@ -58,7 +61,14 @@ class MainView @Inject constructor(
         val sideBar = SideBar(viewModel, resources, ::toggleHamburger)
         sideBar.prefHeightProperty().bind(mainViewRootBorderPane.heightProperty())
         val paddingTopProperty = topBar.heightProperty()
-        sideBar.paddingProperty().bind(Bindings.createObjectBinding({ Insets(paddingTopProperty.doubleValue(), 0.0, 0.0, 0.0) }, paddingTopProperty))
+        sideBar.paddingProperty().bind(Bindings.createObjectBinding({
+            Insets(
+                paddingTopProperty.doubleValue(),
+                0.0,
+                0.0,
+                0.0
+            )
+        }, paddingTopProperty))
         drawer.setSidePane(sideBar)
         drawer.prefHeightProperty().bind(mainViewRootBorderPane.heightProperty())
 
@@ -105,11 +115,15 @@ class MainView @Inject constructor(
         if (error != null) {
             val errorKey = "SystemStatus_${Status.ERROR}_${error.errorCode.errorCode}"
             val errorMessage = resources.getString(errorKey)
-            snackbar.enqueue(JFXSnackbar.SnackbarEvent(ErrorBar(
-                    errorMessage,
-                    resources.getString("Refresh"),
-                    viewModel::refresh
-            ), Duration.seconds(8.0)))
+            snackbar.enqueue(
+                JFXSnackbar.SnackbarEvent(
+                    ErrorBar(
+                        errorMessage,
+                        resources.getString("Refresh"),
+                        viewModel::refresh
+                    ), Duration.seconds(8.0)
+                )
+            )
         }
     }
 

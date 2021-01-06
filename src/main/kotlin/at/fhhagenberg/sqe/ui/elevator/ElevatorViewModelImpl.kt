@@ -30,7 +30,7 @@ class ElevatorViewModelImpl @Inject constructor(
     override val currentPositionProperty = SimpleIntegerProperty(0)
     override val buildingHeightProperty = SimpleIntegerProperty(0)
     override val committedDirectionProperty = SimpleObjectProperty(Direction.UNKNOWN)
-    override val accelerationProperty = SimpleIntegerProperty()
+    override val accelerationProperty = SimpleIntegerProperty(0)
     override val doorStateProperty = SimpleObjectProperty(DoorState.UNKNOWN)
     override val capacityProperty = SimpleIntegerProperty(0)
     override val speedProperty = SimpleIntegerProperty(0)

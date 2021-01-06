@@ -7,10 +7,13 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.layout.VBox
 
 class ElevatorMetricsCard constructor(
-        private val name: String,
-        private val valueProperty: ObservableObjectValue<String>,
-        private val unit: String
+    private val labelId: String,
+    private val name: String,
+    private val valueProperty: ObservableObjectValue<String>,
+    private val unit: String
 ) : BorderPane() {
+
+    private lateinit var valueLabel: Label
 
     init {
         this.styleClass.add("elevatorMetricsCard")
@@ -21,7 +24,8 @@ class ElevatorMetricsCard constructor(
         val centerLabelContainer = VBox(2.0)
         centerLabelContainer.alignment = Pos.CENTER
 
-        val valueLabel = Label()
+        valueLabel = Label()
+        valueLabel.id = labelId
         valueLabel.text = valueProperty.get()
         valueLabel.textProperty().bind(valueProperty)
         valueLabel.styleClass.add("elevatorMetricsCard-valueLabel")

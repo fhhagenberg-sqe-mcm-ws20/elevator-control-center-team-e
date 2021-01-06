@@ -29,7 +29,7 @@ class ElevatorMetricsBox(
 
             resources.getString("SystemStatus_$resourceKey")
         }, viewModel.elevatorProperty)
-        val systemStatusMetricsCard = ElevatorMetricsCard("system status", systemStatusBinding, "")
+        val systemStatusMetricsCard = ElevatorMetricsCard("system_status", resources.getString("SystemStatus"), systemStatusBinding, "")
         this.children.add(systemStatusMetricsCard)
 
         val horizontalContainer = HBox()
@@ -42,20 +42,20 @@ class ElevatorMetricsBox(
         val accelerationBinding = Bindings.createStringBinding({
             numberFormat.format(viewModel.accelerationProperty.get())
         }, viewModel.accelerationProperty)
-        val accelerationMetricsCard = ElevatorMetricsCard(resources.getString("Acceleration"), accelerationBinding, resources.getString("AccelerationFtS"))
+        val accelerationMetricsCard = ElevatorMetricsCard("acc", resources.getString("Acceleration"), accelerationBinding, resources.getString("AccelerationFtS"))
 
         // DoorState
         val doorStateBinding = Bindings.createStringBinding({
             val doorState = viewModel.doorStateProperty.get()
             resources.getString("DoorState_${doorState.doorState}")
         }, viewModel.doorStateProperty)
-        val doorStateMetricsCard = ElevatorMetricsCard(resources.getString("DoorState"), doorStateBinding, "")
+        val doorStateMetricsCard = ElevatorMetricsCard("door", resources.getString("DoorState"), doorStateBinding, "")
 
         // Capacity
         val capacityBinding = Bindings.createStringBinding({
             numberFormat.format(viewModel.capacityProperty.get())
         }, viewModel.capacityProperty)
-        val capacityMetricsCard = ElevatorMetricsCard(resources.getString("Capacity"), capacityBinding, resources.getString("CapacityUnitPeople"))
+        val capacityMetricsCard = ElevatorMetricsCard("capacity", resources.getString("Capacity"), capacityBinding, resources.getString("CapacityUnitPeople"))
 
         leftColumnCardContainer.children.addAll(accelerationMetricsCard, doorStateMetricsCard, capacityMetricsCard)
 
@@ -66,20 +66,20 @@ class ElevatorMetricsBox(
         val speedBinding = Bindings.createStringBinding({
             numberFormat.format(viewModel.speedProperty.get())
         }, viewModel.speedProperty)
-        val speedMetricsCard = ElevatorMetricsCard(resources.getString("Speed"), speedBinding, resources.getString("SpeedFtS"))
+        val speedMetricsCard = ElevatorMetricsCard("speed", resources.getString("Speed"), speedBinding, resources.getString("SpeedFtS"))
 
         // Weight
         val weightBinding = Bindings.createStringBinding({
             numberFormat.format(viewModel.weightProperty.get())
         }, viewModel.weightProperty)
-        val weightMetricsCard = ElevatorMetricsCard(resources.getString("Weight"), weightBinding, resources.getString("WeightLbs"))
+        val weightMetricsCard = ElevatorMetricsCard("weight", resources.getString("Weight"), weightBinding, resources.getString("WeightLbs"))
 
         // Polling interval
         val pollingIntervalBinding = Bindings.createStringBinding({
             val hz = 1000.0 / viewModel.pollingIntervalProperty.get()
             numberFormat.format(hz)
         }, viewModel.pollingIntervalProperty)
-        val clockTickMetricsCard = ElevatorMetricsCard(resources.getString("PollingInterval"), pollingIntervalBinding, resources.getString("PollingIntervalHz"))
+        val clockTickMetricsCard = ElevatorMetricsCard("poll", resources.getString("PollingInterval"), pollingIntervalBinding, resources.getString("PollingIntervalHz"))
         rightColumnCardContainer.children.addAll(speedMetricsCard, weightMetricsCard, clockTickMetricsCard)
 
         horizontalContainer.children.addAll(leftColumnCardContainer, rightColumnCardContainer)
