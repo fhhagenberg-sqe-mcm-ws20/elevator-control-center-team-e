@@ -2,7 +2,7 @@ package at.fhhagenberg.sqe.ui.main
 
 import at.fhhagenberg.sqe.di.key.AutoModeProperty
 import at.fhhagenberg.sqe.entity.ElevatorControlSystem
-import at.fhhagenberg.sqe.model.Error
+import at.fhhagenberg.sqe.model.AppState
 import at.fhhagenberg.sqe.model.Resource
 import at.fhhagenberg.sqe.repository.ElevatorControlSystemRepository
 import com.google.inject.Inject
@@ -19,7 +19,7 @@ class MainViewModelImpl @Inject constructor(
         elevatorControlSystemRepository: ElevatorControlSystemRepository,
         private val elevatorControl: ConnectableIElevator
 ) : MainViewModel {
-    override val errorProperty = SimpleObjectProperty<Error>()
+    override val appStateProperty = SimpleObjectProperty<AppState>()
     override val selectedElevatorNumberProperty = SimpleIntegerProperty(-1)
     override var selectedElevatorNumber: Int
         get() = selectedElevatorNumberProperty.get()
@@ -40,10 +40,12 @@ class MainViewModelImpl @Inject constructor(
         applyElevatorNumbers(elevatorControlSystem.get())
         elevatorControlSystem.addListener(elevatorChangeListener)
 
-        val errorBinding = Bindings.createObjectBinding({
-            elevatorControlSystem.get()?.error
+        val appStateBinding = Bindings.createObjectBinding({
+            elevatorControlSystem.get()?.let { elevatorControlSystem ->
+                AppState(elevatorControlSystem.status, elevatorControlSystem.error)
+            }
         }, elevatorControlSystem)
-        errorProperty.bind(errorBinding)
+        appStateProperty.bind(appStateBinding)
     }
 
     override fun refresh() {

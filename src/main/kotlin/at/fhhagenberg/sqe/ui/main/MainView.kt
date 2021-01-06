@@ -1,11 +1,12 @@
 package at.fhhagenberg.sqe.ui.main
 
+import at.fhhagenberg.sqe.model.AppState
 import at.fhhagenberg.sqe.model.Error
 import at.fhhagenberg.sqe.model.Status
 import at.fhhagenberg.sqe.ui.common.BaseView
 import at.fhhagenberg.sqe.ui.common.ViewController
 import at.fhhagenberg.sqe.ui.elevator.ElevatorView
-import at.fhhagenberg.sqe.ui.error.ErrorBar
+import at.fhhagenberg.sqe.ui.status.StatusBar
 import at.fhhagenberg.sqe.ui.overview.OverviewView
 import at.fhhagenberg.sqe.util.ViewLoader
 import com.google.inject.Inject
@@ -16,14 +17,11 @@ import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition
 import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
 import javafx.geometry.Insets
-import javafx.scene.control.Alert
-import javafx.scene.control.Alert.AlertType
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import javafx.util.Duration
 import java.net.URL
 import java.util.*
-
 
 class MainView @Inject constructor(
     viewModel: MainViewModel,
@@ -93,10 +91,10 @@ class MainView @Inject constructor(
         setContent(viewModel.selectedElevatorNumber)
 
         // Listen to errors
-        viewModel.errorProperty.addListener { _, _, newValue ->
-            handleError(resources, newValue)
+        viewModel.appStateProperty.addListener { _, _, newValue ->
+            handleAppState(resources, newValue)
         }
-        handleError(resources, viewModel.errorProperty.get())
+        handleAppState(resources, viewModel.appStateProperty.get())
     }
 
     private fun toggleHamburger() {
@@ -111,20 +109,41 @@ class MainView @Inject constructor(
         }
     }
 
+    private fun handleAppState(resources: ResourceBundle, appState: AppState?) {
+        if (appState != null) {
+            if (appState.status == Status.SUCCESS) {
+                handleSuccess(resources)
+            } else if (appState.status == Status.ERROR) {
+                handleError(resources, appState.error)
+            }
+        }
+    }
+
     private fun handleError(resources: ResourceBundle, error: Error?) {
         if (error != null) {
             val errorKey = "SystemStatus_${Status.ERROR}_${error.errorCode.errorCode}"
             val errorMessage = resources.getString(errorKey)
             snackbar.enqueue(
                 JFXSnackbar.SnackbarEvent(
-                    ErrorBar(
+                    StatusBar(
                         errorMessage,
-                        resources.getString("Refresh"),
-                        viewModel::refresh
-                    ), Duration.seconds(8.0)
+                        "statusBarError"
+                    ), Duration.seconds(2.0)
                 )
             )
         }
+    }
+
+    private fun handleSuccess(resources: ResourceBundle) {
+        val message = resources.getString("Connected")
+        snackbar.enqueue(
+            JFXSnackbar.SnackbarEvent(
+                StatusBar(
+                    message,
+                    "statusBarSuccess"
+                ), Duration.seconds(2.0)
+            )
+        )
     }
 
     private fun setContent(elevatorNumber: Int) {

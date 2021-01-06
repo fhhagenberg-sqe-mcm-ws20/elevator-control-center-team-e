@@ -18,25 +18,7 @@ class TopBar(
     }
 
     private fun initView() {
-        this.children.add(createRefreshButton())
         this.children.add(createAutoModeToggleButton())
-    }
-
-    private fun createRefreshButton() : Button {
-        val button = Button(resources.getString("Refresh"))
-        button.styleClass.add("topBar-refresh-button")
-        button.setOnMouseClicked {
-            mainViewModel.refresh()
-        }
-
-        val image = Image("/icons/refreshIcon.png")
-        val imageView = ImageView(image)
-        imageView.fitHeight = 18.0
-        imageView.isPreserveRatio = true
-
-        button.graphic = imageView
-
-        return button
     }
 
     private fun createAutoModeToggleButton() : JFXToggleButton {

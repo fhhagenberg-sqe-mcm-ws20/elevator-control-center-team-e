@@ -5,24 +5,23 @@
     -fx-font-weight: bold;
 }
 
-/* ErrorBar.kt */
-.errorBarMain {
+/* StatusBar.kt */
+.statusBarMain {
     -fx-padding: 8 25;
-    -fx-background-color: rgba(0,0,255,0.96);
     -fx-background-radius: 25;
     -fx-alignment: 'center';
     -fx-spacing: 100;
 }
-.errorMessageLabel {
+.statusMessageLabel {
     -fx-font-size: 12pt;
     -fx-font-weight: bolder;
     -fx-text-fill: "#ffffff";
 }
-.errorBarActionButton {
-    -fx-background-color: '#ffffff';
-    -fx-text-fill: rgba(0,0,255,0.96);
-    -fx-background-radius: 25;
-    -fx-font-weight: bolder;
+.statusBarSuccess {
+    -fx-background-color: rgba(75,181,67,0.96);
+}
+.statusBarError {
+    -fx-background-color: rgba(205,92,92,0.96);
 }
 
 /* MainView */

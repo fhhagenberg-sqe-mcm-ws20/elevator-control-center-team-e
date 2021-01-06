@@ -1,12 +1,14 @@
 package at.fhhagenberg.sqe.ui.main
 
 import at.fhhagenberg.sqe.di.TestDI
+import at.fhhagenberg.sqe.model.Status
 import at.fhhagenberg.sqe.task.UpdateElevatorStoreTask
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import sqelevator.ConnectableIElevator
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -47,9 +49,11 @@ class MainViewModelTest {
     }
 
     @Test
-    fun testError() {
-        val error = viewModel.errorProperty.get()
-        assertNull(error)
+    fun testAppState() {
+        val appState = viewModel.appStateProperty.get()
+
+        assertNotNull(appState)
+        assertEquals(Status.SUCCESS, appState.status)
     }
 
     @Test

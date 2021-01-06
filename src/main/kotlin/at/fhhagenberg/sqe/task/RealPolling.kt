@@ -20,9 +20,14 @@ class RealPolling @Inject constructor(
     override fun start() {
         task = executorService.submit {
             while (!Thread.interrupted()) {
+                val t1 = System.currentTimeMillis()
                 updateElevatorStoreTask.fetchData()
+
+                val operationTime = System.currentTimeMillis() - t1
+                val sleepTime = (pollingInterval - operationTime).coerceAtLeast(0)
+
                 try {
-                    TimeUnit.MILLISECONDS.sleep(pollingInterval)
+                    TimeUnit.MILLISECONDS.sleep(sleepTime)
                 } catch (_: InterruptedException) {
                     break
                 }

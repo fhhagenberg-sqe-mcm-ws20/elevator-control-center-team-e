@@ -1,6 +1,6 @@
 package at.fhhagenberg.sqe.ui.main
 
-import at.fhhagenberg.sqe.model.Error
+import at.fhhagenberg.sqe.model.AppState
 import at.fhhagenberg.sqe.viewmodel.ViewModel
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.ReadOnlyIntegerProperty
@@ -8,7 +8,7 @@ import javafx.beans.property.ReadOnlyObjectProperty
 import javafx.collections.ObservableList
 
 interface MainViewModel : ViewModel {
-    val errorProperty: ReadOnlyObjectProperty<Error>
+    val appStateProperty: ReadOnlyObjectProperty<AppState>
     val selectedElevatorNumberProperty: ReadOnlyIntegerProperty
     var selectedElevatorNumber: Int
 

@@ -31,6 +31,7 @@ class RmiAndDummyElevatorAdapter @Inject constructor(
             }
             lastElevatorControlSystem
         } catch (exception: Exception) {
+            reconnect()
             Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }
@@ -41,6 +42,7 @@ class RmiAndDummyElevatorAdapter @Inject constructor(
             servicedFloorService.updateServicedFloor(servicedFloor, isServiced)
             Resource.success(true)
         } catch (exception: Exception) {
+            reconnect()
             Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }
@@ -51,6 +53,7 @@ class RmiAndDummyElevatorAdapter @Inject constructor(
             elevatorService.updateTargetFloor(elevator, targetFloor)
             Resource.success(true)
         } catch (exception: Exception) {
+            reconnect()
             Resource.error(Error(exception, ErrorCode.CONNECTION_ERROR))
         }
     }

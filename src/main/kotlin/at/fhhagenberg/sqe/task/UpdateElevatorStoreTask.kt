@@ -13,11 +13,9 @@ class UpdateElevatorStoreTask @Inject constructor(
         private val elevatorAdapter: ElevatorAdapter
 ) {
     fun fetchData() {
-        appExecutors.networkIO.execute {
-            val elevatorControlSystemResource = elevatorAdapter.getElevatorControlSystem()
-            appExecutors.mainThread.execute {
-                updateStore(elevatorControlSystemResource)
-            }
+        val elevatorControlSystemResource = elevatorAdapter.getElevatorControlSystem()
+        appExecutors.mainThread.execute {
+            updateStore(elevatorControlSystemResource)
         }
     }
 

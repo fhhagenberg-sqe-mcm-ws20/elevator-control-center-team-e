@@ -15,7 +15,7 @@ import org.testfx.matcher.control.LabeledMatchers
 import sqelevator.ConnectableIElevator
 
 @ExtendWith(ApplicationExtension::class)
-class UITests {
+class HoverAnimationTest {
 
     private lateinit var updateElevatorStoreTask: UpdateElevatorStoreTask
     private lateinit var realIElevator: ConnectableIElevator
@@ -56,47 +56,5 @@ class UITests {
 
         // Click on  services floor 1
         robot.clickOn("#servicesfloorimage_0_1")
-
-        // Return to overview
-        navigateToOverview(robot)
-    }
-
-    @Test
-    fun testApiCalled(robot: FxRobot) {
-        robot.clickOn("#hamburger")
-        robot.sleep(200L)
-        robot.clickOn("#elevator_0")
-        robot.sleep(200L)
-        robot.clickOn("#hamburger")
-        robot.sleep(200L)
-        robot.clickOn("#elevator_1")
-        robot.clickOn("#automodeswitch")
-        robot.clickOn("#floornumberlabel_1_1")
-
-        // Return to overview
-        navigateToOverview(robot)
-
-        Mockito.verify(realIElevator).setTarget(1, 1)
-    }
-
-    @Test
-    fun testValueChange(robot: FxRobot) {
-        robot.clickOn("#hamburger")
-        robot.sleep(400L)
-        robot.clickOn("#elevator_0")
-        Mockito.`when`(realIElevator.getElevatorAccel(0)).thenReturn(0)
-        Platform.runLater {
-            updateElevatorStoreTask.fetchData()
-            FxAssert.verifyThat("#acc", LabeledMatchers.hasText("0"))
-
-            // Return to overview
-            navigateToOverview(robot)
-        }
-    }
-
-    private fun navigateToOverview(robot: FxRobot) {
-        robot.clickOn("#hamburger")
-        robot.sleep(200L)
-        robot.clickOn("#elevator_-1")
     }
 }

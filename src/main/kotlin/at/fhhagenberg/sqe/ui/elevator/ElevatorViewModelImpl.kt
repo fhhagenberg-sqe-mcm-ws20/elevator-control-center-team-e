@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.ui.elevator
 
+import at.fhhagenberg.sqe.AppExecutors
 import at.fhhagenberg.sqe.adapter.ElevatorAdapter
 import at.fhhagenberg.sqe.di.key.AutoModeProperty
 import at.fhhagenberg.sqe.di.key.PollingInterval
@@ -21,7 +22,8 @@ class ElevatorViewModelImpl @Inject constructor(
         @PollingInterval val pollingInterval: Long,
         private val elevatorRepository: ElevatorRepository,
         private val elevatorControlSystemRepository: ElevatorControlSystemRepository,
-        private val elevatorAdapter: ElevatorAdapter
+        private val elevatorAdapter: ElevatorAdapter,
+        private val appExecutors: AppExecutors
 ) : ElevatorViewModel {
 
     override val elevatorNumberProperty = SimpleIntegerProperty(-1)
@@ -118,7 +120,9 @@ class ElevatorViewModelImpl @Inject constructor(
     override fun updateTargetFloor(targetFloor: Int) {
         if (!autoModeProperty.get()) {
             elevator?.get()?.data?.let { elevator ->
-                elevatorAdapter.updateTargetFloor(elevator, targetFloor)
+                appExecutors.networkIO.execute {
+                    elevatorAdapter.updateTargetFloor(elevator, targetFloor)
+                }
             }
         }
     }

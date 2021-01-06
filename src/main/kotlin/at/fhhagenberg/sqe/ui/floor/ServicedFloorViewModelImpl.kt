@@ -1,5 +1,6 @@
 package at.fhhagenberg.sqe.ui.floor
 
+import at.fhhagenberg.sqe.AppExecutors
 import at.fhhagenberg.sqe.adapter.ElevatorAdapter
 import at.fhhagenberg.sqe.di.key.AutoModeProperty
 import at.fhhagenberg.sqe.entity.ServicedFloor
@@ -12,7 +13,8 @@ import javafx.beans.property.*
 class ServicedFloorViewModelImpl @Inject constructor(
         @AutoModeProperty override val autoModeProperty: BooleanProperty,
         private val elevatorAdapter: ElevatorAdapter,
-        private val servicedFloorRepository: ServicedFloorRepository
+        private val servicedFloorRepository: ServicedFloorRepository,
+        private val appExecutors: AppExecutors
 ) : ServicedFloorViewModel {
 
     override val floorNumberProperty = SimpleIntegerProperty(-1)
@@ -38,7 +40,9 @@ class ServicedFloorViewModelImpl @Inject constructor(
     override fun updateServicedFloor(isServiced: Boolean) {
         if (!autoModeProperty.get()) {
             servicedFloor?.get()?.data?.let { servicedFloor ->
-                elevatorAdapter.updateServicedFloor(servicedFloor, isServiced)
+                appExecutors.networkIO.execute {
+                    elevatorAdapter.updateServicedFloor(servicedFloor, isServiced)
+                }
             }
         }
     }
