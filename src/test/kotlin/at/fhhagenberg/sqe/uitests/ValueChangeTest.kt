@@ -34,9 +34,10 @@ class ValueChangeTest {
         robot.sleep(400L)
         robot.clickOn("#elevator_0")
         Mockito.`when`(realIElevator.getElevatorAccel(0)).thenReturn(0)
-        Platform.runLater {
+        robot.interact {
             updateElevatorStoreTask.fetchData()
-            FxAssert.verifyThat("#acc", LabeledMatchers.hasText("0"))
         }
+
+        FxAssert.verifyThat("#acc", LabeledMatchers.hasText("0"))
     }
 }

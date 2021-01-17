@@ -34,8 +34,8 @@ class StatusMessageTest {
         robot.sleep(1500L)
         FxAssert.verifyThat("#status_label", LabeledMatchers.hasText("connected"))
 
-        Platform.runLater {
-            Mockito.`when`(realIElevator.getElevatorAccel(0)).thenThrow(RemoteException())
+        Mockito.`when`(realIElevator.getElevatorAccel(0)).thenThrow(RemoteException())
+        robot.interact {
             updateElevatorStoreTask.fetchData()
         }
 
