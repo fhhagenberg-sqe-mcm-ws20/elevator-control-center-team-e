@@ -23,7 +23,7 @@ class ElevatorRepositoryTest {
 
     @Test
     fun testGetElevator() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val elevatorProperty = repository.getElevator(1)
         val elevatorResource = elevatorProperty.get()
 
@@ -35,7 +35,7 @@ class ElevatorRepositoryTest {
 
     @Test
     fun testGetElevatorInvalid() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val elevatorProperty = repository.getElevator(-1)
         val elevatorResource = elevatorProperty.get()
 

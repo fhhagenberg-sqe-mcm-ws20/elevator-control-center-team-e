@@ -2,7 +2,6 @@ package at.fhhagenberg.sqe.uitests
 
 import at.fhhagenberg.sqe.di.TestDI
 import at.fhhagenberg.sqe.task.UpdateElevatorStoreTask
-import javafx.application.Platform
 import javafx.stage.Stage
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -36,7 +35,7 @@ class StatusMessageTest {
 
         Mockito.`when`(realIElevator.getElevatorAccel(0)).thenThrow(RemoteException())
         robot.interact {
-            updateElevatorStoreTask.fetchData()
+            updateElevatorStoreTask.run()
         }
 
         robot.sleep(1800L)

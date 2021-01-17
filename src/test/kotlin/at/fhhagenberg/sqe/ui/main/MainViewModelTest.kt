@@ -9,7 +9,6 @@ import org.mockito.Mockito
 import sqelevator.ConnectableIElevator
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class MainViewModelTest {
@@ -22,7 +21,7 @@ class MainViewModelTest {
         val injector = TestDI.createMockInjector()
         viewModel = injector.getInstance(MainViewModel::class.java)
         realIElevator = injector.getInstance(ConnectableIElevator::class.java)
-        injector.getInstance(UpdateElevatorStoreTask::class.java).fetchData()
+        injector.getInstance(UpdateElevatorStoreTask::class.java).run()
     }
 
     @Test

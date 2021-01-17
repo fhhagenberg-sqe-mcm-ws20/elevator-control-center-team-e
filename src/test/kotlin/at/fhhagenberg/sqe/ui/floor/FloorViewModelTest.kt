@@ -17,7 +17,7 @@ class FloorViewModelTest {
         val injector = TestDI.createMockInjector()
         viewModel = injector.getInstance(FloorViewModel::class.java)
         realIElevator = injector.getInstance(ConnectableIElevator::class.java)
-        injector.getInstance(UpdateElevatorStoreTask::class.java).fetchData()
+        injector.getInstance(UpdateElevatorStoreTask::class.java).run()
     }
 
     @Test

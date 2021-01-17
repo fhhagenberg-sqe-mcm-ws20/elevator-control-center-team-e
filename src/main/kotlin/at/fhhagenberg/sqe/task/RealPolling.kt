@@ -8,8 +8,14 @@ import java.util.concurrent.TimeUnit
 
 class RealPolling @Inject constructor(
         @PollingInterval private val pollingInterval: Long,
-        private val updateElevatorStoreTask: UpdateElevatorStoreTask
+        updateElevatorStoreTask: UpdateElevatorStoreTask,
+        autoModeTask: AutoModeTask,
 ) : Polling {
+
+    private val tasks = listOf(
+        updateElevatorStoreTask,
+        autoModeTask
+    )
 
     private val executorService by lazy {
         Executors.newSingleThreadExecutor()
@@ -21,7 +27,7 @@ class RealPolling @Inject constructor(
         task = executorService.submit {
             while (!Thread.interrupted()) {
                 val t1 = System.currentTimeMillis()
-                updateElevatorStoreTask.fetchData()
+                tasks.forEach { it.run() }
 
                 val operationTime = System.currentTimeMillis() - t1
                 val sleepTime = (pollingInterval - operationTime).coerceAtLeast(0)

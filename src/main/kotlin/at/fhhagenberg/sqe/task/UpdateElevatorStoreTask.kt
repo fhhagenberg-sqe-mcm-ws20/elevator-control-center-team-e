@@ -11,8 +11,9 @@ class UpdateElevatorStoreTask @Inject constructor(
         private val appExecutors: AppExecutors,
         private val elevatorStore: ElevatorStore,
         private val elevatorAdapter: ElevatorAdapter
-) {
-    fun fetchData() {
+) : Runnable {
+
+    override fun run() {
         val elevatorControlSystemResource = elevatorAdapter.getElevatorControlSystem()
         appExecutors.mainThread.execute {
             updateStore(elevatorControlSystemResource)

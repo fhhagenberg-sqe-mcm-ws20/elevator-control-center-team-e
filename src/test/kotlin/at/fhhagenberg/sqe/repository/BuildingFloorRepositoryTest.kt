@@ -26,7 +26,7 @@ class BuildingFloorRepositoryTest {
 
     @Test
     fun testGetBuildingFloor() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val floorProperty = repository.getBuildingFloor(1)
         val floorResource = floorProperty.get()
 
@@ -38,7 +38,7 @@ class BuildingFloorRepositoryTest {
 
     @Test
     fun testGetBuildingFloorInvalid() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val floorProperty = repository.getBuildingFloor(-1)
         val floorResource = floorProperty.get()
 

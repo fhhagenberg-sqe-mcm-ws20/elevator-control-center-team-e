@@ -35,7 +35,7 @@ object TestDI {
     @JvmStatic
     fun provideApp(): InjectedApp {
         val injector = createMockInjector()
-        injector.getInstance(UpdateElevatorStoreTask::class.java).fetchData()
+        injector.getInstance(UpdateElevatorStoreTask::class.java).run()
 
         val app = App()
         app.injectorFactory = { injector }

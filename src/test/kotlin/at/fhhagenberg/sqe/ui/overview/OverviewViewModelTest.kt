@@ -14,7 +14,7 @@ class OverviewViewModelTest {
     fun setUp() {
         val injector = TestDI.createMockInjector()
         viewModel = injector.getInstance(OverviewViewModel::class.java)
-        injector.getInstance(UpdateElevatorStoreTask::class.java).fetchData()
+        injector.getInstance(UpdateElevatorStoreTask::class.java).run()
     }
 
     @Test
