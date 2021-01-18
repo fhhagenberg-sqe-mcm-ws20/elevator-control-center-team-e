@@ -5,7 +5,6 @@ import at.fhhagenberg.sqe.di.key.AutoModeProperty
 import at.fhhagenberg.sqe.di.key.PollingInterval
 import at.fhhagenberg.sqe.entity.Direction
 import at.fhhagenberg.sqe.entity.DoorState
-import at.fhhagenberg.sqe.model.Resource
 import at.fhhagenberg.sqe.model.Status
 import at.fhhagenberg.sqe.store.ElevatorStore
 import at.fhhagenberg.sqe.task.UpdateElevatorStoreTask
@@ -39,7 +38,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testAutoMode() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val autoMode = viewModel.autoModeProperty.get()
 
@@ -48,7 +47,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testElevatorNumber() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val elevatorNumber = viewModel.elevatorNumberProperty.get()
 
@@ -57,7 +56,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testElevatorNumberPlain() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val elevatorNumber = viewModel.elevatorNumber
 
@@ -66,7 +65,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testElevator() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val elevatorNumber = viewModel.elevatorProperty.get()
 
@@ -77,7 +76,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testFloorNumbers() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val floorNumbers = viewModel.floorNumbers
 
@@ -86,7 +85,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testCurrentPosition() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val currentPosition = viewModel.currentPositionProperty.get()
 
@@ -95,7 +94,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testBuildingHeight() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val buildingHeight = viewModel.buildingHeightProperty.get()
 
@@ -104,7 +103,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testCommittedDirection() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val committedDirection = viewModel.committedDirectionProperty.get()
 
@@ -113,7 +112,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testAcceleration() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val acceleration = viewModel.accelerationProperty.get()
 
@@ -122,7 +121,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testDoorState() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val doorState = viewModel.doorStateProperty.get()
 
@@ -131,7 +130,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testCapacity() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val capacity = viewModel.capacityProperty.get()
 
@@ -140,7 +139,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testSpeed() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val speed = viewModel.speedProperty.get()
 
@@ -149,7 +148,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testWeight() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val weight = viewModel.weightProperty.get()
 
@@ -158,7 +157,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testTargetFloor() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val targetFloor = viewModel.targetFloorProperty.get()
 
@@ -167,7 +166,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testPollingInterval() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         val pollingInterval = viewModel.pollingIntervalProperty.get()
 
@@ -193,7 +192,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testUpdateTargetFloor() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         autoModeProperty.set(false)
         viewModel.updateTargetFloor(1)
@@ -203,7 +202,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testUpdateTargetFloorAutoMode() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1)
         autoModeProperty.set(true)
         viewModel.updateTargetFloor(1)
@@ -213,7 +212,7 @@ class ElevatorViewModelTest {
 
     @Test
     fun testUpdateTargetFloorDataNotLoaded() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         autoModeProperty.set(false)
         viewModel.updateTargetFloor(1)
 

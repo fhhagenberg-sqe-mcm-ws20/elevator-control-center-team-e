@@ -23,7 +23,7 @@ class ServicedFloorRepositoryTest {
 
     @Test
     fun testGetServicedFloor() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val servicedFloorProperty = repository.getServicedFloor(1, 1)
         val servicedFloorResource = servicedFloorProperty.get()
 
@@ -35,7 +35,7 @@ class ServicedFloorRepositoryTest {
 
     @Test
     fun testGetServicedFloorInvalid() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val servicedFloorProperty = repository.getServicedFloor(-1, -1)
         val servicedFloorResource = servicedFloorProperty.get()
 

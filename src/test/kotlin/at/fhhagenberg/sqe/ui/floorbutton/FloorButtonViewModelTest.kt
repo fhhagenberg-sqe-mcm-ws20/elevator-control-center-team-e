@@ -14,7 +14,7 @@ class FloorButtonViewModelTest {
     fun setUp() {
         val injector = TestDI.createMockInjector()
         viewModel = injector.getInstance(FloorButtonViewModel::class.java)
-        injector.getInstance(UpdateElevatorStoreTask::class.java).fetchData()
+        injector.getInstance(UpdateElevatorStoreTask::class.java).run()
     }
 
     @Test

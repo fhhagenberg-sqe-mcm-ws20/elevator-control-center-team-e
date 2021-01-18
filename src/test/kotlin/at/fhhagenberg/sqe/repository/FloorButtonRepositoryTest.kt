@@ -23,7 +23,7 @@ class FloorButtonRepositoryTest {
 
     @Test
     fun testGetFloorButton() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val floorButtonProperty = repository.getFloorButton(1, 1)
         val floorButtonResource = floorButtonProperty.get()
 
@@ -35,7 +35,7 @@ class FloorButtonRepositoryTest {
 
     @Test
     fun testGetFloorButtonInvalid() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val floorButtonProperty = repository.getFloorButton(-1, -1)
         val floorButtonResource = floorButtonProperty.get()
 

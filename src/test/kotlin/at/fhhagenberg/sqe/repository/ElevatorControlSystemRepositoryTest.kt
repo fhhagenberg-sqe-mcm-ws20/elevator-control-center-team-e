@@ -29,7 +29,7 @@ class ElevatorControlSystemRepositoryTest {
 
     @Test
     fun testGetElevatorControlSystem() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val elevatorControlSystemProperty = repository.getElevatorControlSystem()
         val elevatorControlSystemResource = elevatorControlSystemProperty.get()
 
@@ -42,7 +42,7 @@ class ElevatorControlSystemRepositoryTest {
     @Test
     fun testGetElevatorControlSystemError() {
         Mockito.`when`(realIElevator.elevatorNum).thenThrow(RemoteException())
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         val elevatorControlSystemProperty = repository.getElevatorControlSystem()
         val elevatorControlSystemResource = elevatorControlSystemProperty.get()
 

@@ -31,7 +31,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testAutoMode() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1, 1)
         val autoMode = viewModel.autoModeProperty.get()
 
@@ -40,7 +40,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testFloorNumber() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1, 1)
         val floorNumber = viewModel.floorNumberProperty.get()
 
@@ -49,7 +49,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testServicesFloor() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1, 1)
         val servicesFloor = viewModel.servicesFloorProperty.get()
 
@@ -58,7 +58,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testUpdateServicedFloor() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1, 1)
         autoModeProperty.set(false)
         viewModel.updateServicedFloor(false)
@@ -68,7 +68,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testUpdateServicedFloorAutoMode() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         viewModel.loadData(1, 1)
         autoModeProperty.set(true)
         viewModel.updateServicedFloor(false)
@@ -78,7 +78,7 @@ class ServicedFloorViewModelTest {
 
     @Test
     fun testUpdateServicedFloorDataNotLoaded() {
-        updateElevatorStoreTask.fetchData()
+        updateElevatorStoreTask.run()
         autoModeProperty.set(false)
         viewModel.updateServicedFloor(false)
 

@@ -2,7 +2,6 @@ package at.fhhagenberg.sqe.uitests
 
 import at.fhhagenberg.sqe.di.TestDI
 import at.fhhagenberg.sqe.task.UpdateElevatorStoreTask
-import javafx.application.Platform
 import javafx.stage.Stage
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -35,7 +34,7 @@ class ValueChangeTest {
         robot.clickOn("#elevator_0")
         Mockito.`when`(realIElevator.getElevatorAccel(0)).thenReturn(0)
         robot.interact {
-            updateElevatorStoreTask.fetchData()
+            updateElevatorStoreTask.run()
         }
 
         FxAssert.verifyThat("#acc", LabeledMatchers.hasText("0"))
