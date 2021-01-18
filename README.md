@@ -25,7 +25,11 @@
 - Run the JAR with the command `java -jar <jar-file.jar>`
 - JAR runs on Windows, Linux and Mac
 
-#### Option B) Build JAR with maven
+#### Option B) Run with maven
+
+- Run `mvn compile javafx:run`
+
+#### Option C) Build JAR with maven
 
 - Make sure you have all prerequisites above installed
 - Open `pom.xml` and adapt it for your purposes:
