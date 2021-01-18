@@ -15,7 +15,7 @@
 #### Download executable JAR
 
 * Make sure you have Java 13 JRE installed
-* Download the [latest jar](fhhagenberg-sqe-mcm-ws20/elevator-control-center-team-e/releases/latest/download/elevator-control-group-e-1.0.jar)
+* Download the [latest jar](https://github.com/fhhagenberg-sqe-mcm-ws20/elevator-control-center-team-e/releases/latest/download/elevator-control-group-e-1.0.jar)
 * JAR runs on Windows, Linux and Mac
 
 #### Build project
