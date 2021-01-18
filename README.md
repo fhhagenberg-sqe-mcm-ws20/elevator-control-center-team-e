@@ -12,7 +12,7 @@
 ### Prerequisites
 
 - [x] Java 13 JDK (e.g. Oracle or OpenJDK).
-- [x] Maven 3. (If you use an IDE like Eclipse or IntelliJ, Maven is **already included** :sunglasses:.)
+- [x] Maven 3. (If you use an IDE like Eclipse or IntelliJ, Maven is already included.)
 	- see http://maven.apache.org/install.html
 - [x] An IDE or code editor of your choice.
 
