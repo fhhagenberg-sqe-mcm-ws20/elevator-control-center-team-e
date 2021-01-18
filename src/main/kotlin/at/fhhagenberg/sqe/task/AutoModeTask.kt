@@ -12,7 +12,7 @@ import javafx.beans.property.BooleanProperty
 class AutoModeTask @Inject constructor(
     private val elevatorAdapter: ElevatorAdapter,
     private val elevatorStore: ElevatorStore,
-    @AutoModeProperty val autoModeProperty: BooleanProperty
+    @AutoModeProperty private val autoModeProperty: BooleanProperty
 ) : Runnable {
 
     override fun run() {
