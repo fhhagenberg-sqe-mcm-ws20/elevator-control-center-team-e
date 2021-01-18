@@ -15,9 +15,9 @@ You can view our product quality metrics on [SonarCloud](https://sonarcloud.io/d
 
 ### Prerequisites
 
-- [x] Java 13 JDK (e.g. Oracle or OpenJDK).
+- [x] Java 13 JDK (e.g. Oracle or OpenJDK)
 - [x] Maven 3 (if you use an IDE like Eclipse or IntelliJ, Maven is already included), see http://maven.apache.org/install.html
-- [x] An IDE or code editor of your choice.
+- [x] An IDE or code editor of your choice
 
 ### Instructions
 
