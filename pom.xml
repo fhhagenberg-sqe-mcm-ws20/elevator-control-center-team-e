@@ -3,17 +3,19 @@
 
     <groupId>at.fhhagenberg.sqe</groupId>
     <artifactId>elevator-control-group-e</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <kotlin.version>1.4.21</kotlin.version>
         <dokka.version>0.10.0</dokka.version>
+        <maven.compiler.release>11</maven.compiler.release>
         <javafx.version>13</javafx.version>
+        <javafx.platform>mac</javafx.platform>
         <junit.version>5.5.2</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>13</maven.compiler.source>
         <maven.compiler.target>13</maven.compiler.target>
-        <main.class>at.fhhagenberg.sqe.App</main.class>
+        <main.class>at.fhhagenberg.sqe.Main</main.class>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <sonar.projectKey>fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-e</sonar.projectKey>
         <sonar.organization>fhhagenberg-sqe-mcm-ws20</sonar.organization>
@@ -34,6 +36,24 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+        <!--<dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+            <classifier>win</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+            <classifier>linux</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+            <classifier>mac</classifier>
+        </dependency>-->
 
         <!-- testing with TestFx/Junit 5-->
         <dependency>
@@ -95,7 +115,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
                     <configuration>
-                        <release>11</release>
+                        <release>${maven.compiler.release}</release>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -106,14 +126,53 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!--https://stackoverflow.com/questions/39089189/how-to-make-a-fat-jar-of-a-maven-project-->
+            <!--https://stackoverflow.com/questions/52653836/maven-shade-javafx-runtime-components-are-missing/52654791#52654791-->
+            <!--https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <!--<appendAssemblyId>false</appendAssemblyId>--> <!-- to avoid the "jar-with-dependencies" suffix -->
+                    <archive>
+                        <manifest>
+                            <mainClass>${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- https://github.com/openjfx/javafx-maven-plugin#javafxjlink-options -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.3</version>
+                <version>0.0.5</version>
                 <configuration>
+                    <!-- <release>${maven.compiler.release}</release> -->
+                    <jlinkImageName>ecs</jlinkImageName>
                     <launcher>launcher</launcher>
                     <mainClass>${main.class}</mainClass>
                 </configuration>
+                <!--<executions>
+                    <execution>
+                        <id>create-jfxjar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jlink</goal>
+                        </goals>
+                    </execution>
+                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.dokka</groupId>
