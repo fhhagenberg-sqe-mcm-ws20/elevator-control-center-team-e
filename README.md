@@ -9,11 +9,14 @@
 - Paul Schmutz s1910455013
 - Roman Socovka s1910455006
 
+### Product quality
+
+You can our product quality metrics on [SonarCloud](https://sonarcloud.io/dashboard?id=fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-e)
+
 ### Prerequisites
 
 - [x] Java 13 JDK (e.g. Oracle or OpenJDK).
-- [x] Maven 3. (If you use an IDE like Eclipse or IntelliJ, Maven is already included.)
-	- see http://maven.apache.org/install.html
+- [x] Maven 3. (If you use an IDE like Eclipse or IntelliJ, Maven is already included), see http://maven.apache.org/install.html
 - [x] An IDE or code editor of your choice.
 
 ### Instructions
