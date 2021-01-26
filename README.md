@@ -13,6 +13,10 @@
 
 You can view our product quality metrics on [SonarCloud](https://sonarcloud.io/dashboard?id=fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-e).
 
+### Project architecture
+
+You can find a diagram showing how our code is structured on [Creately](https://app.creately.com/diagram/Nprp7n9HQEJ/view).
+
 ### Prerequisites
 
 - [x] Java 13 JDK (e.g. Oracle or OpenJDK)
